@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:clipChildren="false">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="客户端名称" />
+
+                <EditText
+                    android:id="@+id/v_conn_client_name"
+                    style="@style/ConnEditView"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="7"
+                    android:hint="必填"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="客户端Id(自动生成)" />
+
+                <EditText
+                    android:id="@+id/v_client_id"
+                    style="@style/ConnEditView"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="7"
+                    android:editable="false"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="用户名" />
+
+                <EditText
+                    android:id="@+id/v_user_name"
+                    style="@style/ConnEditView"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="7"
+                    android:hint="必填"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="密码"/>
+
+                <EditText
+                    android:id="@+id/v_password"
+                    style="@style/ConnEditView"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="7"
+                    android:hint="可为空"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="连接地址" />
+
+                <EditText
+                    android:id="@+id/v_addr"
+                    style="@style/ConnEditView"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="7"
+                    android:hint="eg:127.0.0.1:1883"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="重连延时(毫秒)" />
+
+                <EditText
+                    android:id="@+id/v_reconn_period"
+                    style="@style/ConnEditView"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="7"
+                    android:text="1000" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="连接超时(毫秒)" />
+
+                <EditText
+                    android:id="@+id/v_conn_timeout"
+                    style="@style/ConnEditView"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="7"
+                    android:text="3000" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="KeepAlive(Ping,秒)" />
+
+                <EditText
+                    android:id="@+id/v_keep_alive"
+                    style="@style/ConnEditView"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="7"
+                    android:text="10" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="刷新Ping？" />
+
+                <CheckBox
+                    android:id="@+id/v_reschedule_ping"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:checked="true"
+                    android:theme="@style/CheckBoxStyle"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="清理会话？" />
+
+                <CheckBox
+                    android:id="@+id/v_clean_session"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:checked="true"
+                    android:theme="@style/CheckBoxStyle"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="自动连接？" />
+
+                <CheckBox
+                    android:id="@+id/v_auto_conn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:checked="true"
+                    android:theme="@style/CheckBoxStyle"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="兼容MQTT v3.1.1？" />
+
+                <CheckBox
+                    android:id="@+id/v_mqtt_version"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:checked="true"
+                    android:theme="@style/CheckBoxStyle"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="队列传出Qos0消息？" />
+
+                <CheckBox
+                    android:id="@+id/v_queue_qos0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:checked="true"
+                    android:theme="@style/CheckBoxStyle"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="遗嘱保留？" />
+
+                <CheckBox
+                    android:id="@+id/v_will_retain"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:checked="true"
+                    android:theme="@style/CheckBoxStyle"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="遗嘱主题" />
+
+                <EditText
+                    android:id="@+id/v_will_topic"
+                    style="@style/ConnEditView"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="7"
+                    android:hint="可为空"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="遗嘱Qos等级" />
+
+                <EditText
+                    android:editable="false"
+                    android:id="@+id/v_will_qos"
+                    style="@style/ConnEditView"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="7"
+                    android:text="Qos0"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ConnTextViewStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="遗嘱消息" />
+
+                <EditText
+                    android:id="@+id/v_will_message"
+                    style="@style/ConnEditView"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="7"
+                    android:hint="可为空"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ConnLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/v_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="保存设置" />
+
+                <Button
+                    android:id="@+id/v_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="放弃更改"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

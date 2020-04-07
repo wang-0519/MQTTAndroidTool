@@ -1,0 +1,11 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/Qos0"
+        android:title="Qos0"/>
+    <item android:id="@+id/Qos1"
+        android:title="Qos1"/>
+    <item android:id="@+id/Qos2"
+        android:title="Qos2"/>
+
+</menu>

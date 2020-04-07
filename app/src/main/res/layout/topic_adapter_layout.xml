@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/ClientAdapter">
+
+        <TextView
+            android:id="@+id/v_help_topic_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="topic:  "/>
+
+        <TextView
+            android:id="@+id/v_topic_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/v_help_topic_name"
+            android:text="hello"/>
+
+        <TextView
+            android:id="@+id/v_help_topic_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/v_help_topic_name"
+            android:text="type:  "/>
+
+        <TextView
+            android:id="@+id/v_topic_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/v_help_topic_type"
+            android:layout_below="@id/v_topic_name"
+            android:text="hello"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

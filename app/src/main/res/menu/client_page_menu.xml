@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/v_m_publish"
+        android:title="@string/s_v_m_publish"
+        app:showAsAction="always"
+        android:icon="@drawable/publish_1"/>
+
+    <item android:id="@+id/v_m_subscribe"
+        android:title="@string/s_v_m_subcribe"
+        app:showAsAction="always"
+        android:icon="@drawable/subscribe_1"/>
+
+    <item android:id="@+id/v_m_client_setting"
+        android:title="@string/s_v_m_client_setting"></item>
+
+    <item android:id="@+id/v_m_history_ubytes"
+        android:title="历史报文"></item>
+</menu>
