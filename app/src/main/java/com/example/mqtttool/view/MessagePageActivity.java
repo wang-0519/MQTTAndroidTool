@@ -49,6 +49,7 @@ public class MessagePageActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             binder = (ClientService.MyBinder)service;
             binder.setHandler(handler);
+            flushView();
         }
 
         @Override
@@ -79,7 +80,6 @@ public class MessagePageActivity extends AppCompatActivity {
         }
 
         addListener();
-        flushView();
     }
 
     @Override
@@ -131,6 +131,7 @@ public class MessagePageActivity extends AppCompatActivity {
     }
 
     protected void flushView(){
+        ti = binder.getMQTTClientThread(clientId).getClientInformation().getTopic(ti.getTopicName());
         if(ti != null){
             mapList.clear();
             messages = ti.getMessages();

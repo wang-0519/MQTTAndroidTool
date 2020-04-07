@@ -28,7 +28,6 @@ import com.example.mqtttool.R;
 import com.example.mqtttool.service.ClientService;
 
 import client.ClientInformation;
-import client.Message;
 import client.TopicInformation;
 
 import java.util.ArrayList;
@@ -55,6 +54,7 @@ public class ClientActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             binder = (ClientService.MyBinder)service;
             binder.setHandler(handler);
+            flushView();
         }
 
         @Override
@@ -80,7 +80,6 @@ public class ClientActivity extends AppCompatActivity {
         Intent service = new Intent(this, ClientService.class);
         bindService(service, sc, Service.BIND_AUTO_CREATE);
 
-        flushView();
     }
 
     @Override
@@ -111,13 +110,19 @@ public class ClientActivity extends AppCompatActivity {
         Bundle bundle = null;
         switch (item.getItemId()){
             case R.id.v_m_publish:
+                if(ci.getState() != ClientInformation.CONN_STATE.CONN){
+                   Toast.makeText(ClientActivity.this, "未连接服务器", Toast.LENGTH_LONG).show();
+                    return false;
+                }
                 publishTopic();
-                Toast.makeText(ClientActivity.this, "发布", Toast.LENGTH_LONG).show();
                 flushView();
                 return true;
             case R.id.v_m_subscribe:
+                if(ci.getState() != ClientInformation.CONN_STATE.CONN){
+                    Toast.makeText(ClientActivity.this, "未连接服务器", Toast.LENGTH_LONG).show();
+                    return false;
+                }
                 subscribeTopic();
-                Toast.makeText(ClientActivity.this, "订阅", Toast.LENGTH_SHORT).show();
                 flushView();
                 return true;
             case android.R.id.home:
@@ -179,9 +184,8 @@ public class ClientActivity extends AppCompatActivity {
                         ti.setTpoicType(TopicInformation.TOPICTYPE.SUBSCRIBE);
                         ti.setTopicName(((EditText)(table.findViewById(R.id.v_t_subscribe_topic_name))).getText().toString());
                         ti.setQos(((EditText)(table.findViewById(R.id.v_t_subscribe_topic_qos))).getText().toString());
-                        ci.addTopic(ti);
-                        flushView();
                         binder.getMQTTClientThread(ci.getId()).subscribe(ti);
+                        flushView();
                     }
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -231,7 +235,7 @@ public class ClientActivity extends AppCompatActivity {
                         ti.setTpoicType(TopicInformation.TOPICTYPE.PUBLISH);
                         ti.setTopicName(((EditText)(table.findViewById(R.id.v_t_publish_topic_name))).getText().toString());
                         ti.setQos(((EditText)(table.findViewById(R.id.v_t_publish_topic_qos))).getText().toString());
-                        ci.addTopic(ti);
+                        binder.getMQTTClientThread(ci.getId()).getClientInformation().addTopic(ti);
                         flushView();
                     }
                 })
@@ -267,6 +271,7 @@ public class ClientActivity extends AppCompatActivity {
      */
     public void flushView(){
         mapList.clear();
+        ci = binder.getMQTTClientThread(ci.getId()).getClientInformation();
         if(ci.getTopicInformation().size() != 0){
             for(TopicInformation ti : ci.getTopicInformation()){
                 Map<String, Object> map = new HashMap<>();
@@ -274,18 +279,19 @@ public class ClientActivity extends AppCompatActivity {
                 map.put("type",ti.getTpoicType());
                 mapList.add(map);
             }
-        }else{
-            Map<String, Object> map = new HashMap<>();
-            map.put("topic", "hello");
-            map.put("type",TopicInformation.TOPICTYPE.PUBLISH);
-            mapList.add(map);
-            TopicInformation topicInformation = new TopicInformation();
-            topicInformation.setTopicName("hello");
-            topicInformation.setTpoicType(TopicInformation.TOPICTYPE.PUBLISH);
-            topicInformation.addMessage(new Message("hello"));
-            topicInformation.addMessage(new Message("123456"));
-            ci.addTopic(topicInformation);
         }
+//        else{
+//            Map<String, Object> map = new HashMap<>();
+//            map.put("topic", "hello");
+//            map.put("type",TopicInformation.TOPICTYPE.PUBLISH);
+//            mapList.add(map);
+//            TopicInformation topicInformation = new TopicInformation();
+//            topicInformation.setTopicName("hello");
+//            topicInformation.setTpoicType(TopicInformation.TOPICTYPE.PUBLISH);
+//            topicInformation.addMessage(new Message("hello"));
+//            topicInformation.addMessage(new Message("123456"));
+//            ci.addTopic(topicInformation);
+//        }
         SimpleAdapter adapter = new SimpleAdapter(this, mapList, R.layout.topic_adapter_layout,
                 new String[]{"topic","type"}, new int[]{R.id.v_topic_name, R.id.v_topic_type});
         topics.setAdapter(adapter);
