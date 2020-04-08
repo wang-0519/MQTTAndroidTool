@@ -143,9 +143,6 @@ public class CreateClientActivity extends AppCompatActivity {
                                 binder.updateClient(ci);
                                 intent = new Intent(CreateClientActivity.this, ClientActivity.class);
                             }
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("client",ci);
-                            intent.putExtras(bundle);
                             startActivity(intent);
                         } else {
                             Toast.makeText(CreateClientActivity.this, "请按要求填写信息！", Toast.LENGTH_LONG).show();

@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import client.HelpMess;
 import client.Message;
 import client.TopicInformation;
 
@@ -71,6 +72,7 @@ public class MessagePageActivity extends AppCompatActivity {
         ti = (TopicInformation) getIntent().getSerializableExtra("topic");
         clientId = getIntent().getStringExtra("client_id");
         setTitle("话题:" + ti.getTopicName());
+        handler = new MessagePageHandler();
 
         Intent intent = new Intent(this, ClientService.class);
         bindService(intent, sc, Service.BIND_AUTO_CREATE);
@@ -150,6 +152,14 @@ public class MessagePageActivity extends AppCompatActivity {
     public class MessagePageHandler extends AbsMyHandler{
         @Override
         public void handleMessage(@NonNull android.os.Message msg) {
+            HelpMess helpMess = (HelpMess)msg.obj;
+            if(helpMess.isError()){
+                Toast.makeText(MessagePageActivity.this, helpMess.getErrorMessage(), Toast.LENGTH_LONG).show();
+            } else{
+                if(helpMess.getId().equals(clientId) && helpMess.getTopic().equals(ti.getTopicName()) && ti.getTpoicType() == TopicInformation.TOPICTYPE.SUBSCRIBE){
+                    flushView();
+                }
+            }
             super.handleMessage(msg);
         }
     }

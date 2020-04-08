@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,7 @@ import com.example.mqtttool.client.MQTTClientThread;
 import com.example.mqtttool.service.ClientService;
 
 import client.ClientInformation;
+import client.HelpMess;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -125,6 +127,10 @@ public class MainPageActivity extends AppCompatActivity {
     public class MainPageHandler extends AbsMyHandler{
         @Override
         public void handleMessage(@NonNull Message msg) {
+            HelpMess helpMess = (HelpMess)msg.obj;
+            if(helpMess.isError()){
+                Toast.makeText(MainPageActivity.this, helpMess.getErrorMessage(), Toast.LENGTH_LONG).show();
+            }
             super.handleMessage(msg);
         }
     }

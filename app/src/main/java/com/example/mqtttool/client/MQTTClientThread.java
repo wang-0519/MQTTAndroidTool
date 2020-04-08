@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import client.ClientInformation;
 import client.MQTTClient;
 import client.TopicInformation;
-import messageHandler.AbstractMessageObserver;
 
 /**
  * 客户端线程
@@ -31,7 +30,6 @@ public class MQTTClientThread implements Runnable{
     @Override
     public void run() {
         client = new MQTTClient(clientInformation);
-        client.connect();
         while(sign != RUNTYPE.CLOSE){
             synchronized (by){
                 try{

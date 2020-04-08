@@ -28,6 +28,8 @@ import com.example.mqtttool.R;
 import com.example.mqtttool.service.ClientService;
 
 import client.ClientInformation;
+import client.HelpMess;
+import client.Message;
 import client.TopicInformation;
 
 import java.util.ArrayList;
@@ -300,6 +302,14 @@ public class ClientActivity extends AppCompatActivity {
     public class ClientActivityHandler extends AbsMyHandler{
         @Override
         public void handleMessage(@NonNull android.os.Message msg) {
+            HelpMess helpMess = (HelpMess)msg.obj;
+            if(helpMess.isError()){
+                Toast.makeText(ClientActivity.this, helpMess.getErrorMessage(), Toast.LENGTH_LONG).show();
+            } else {
+                if(helpMess.getId().equals(ci.getId())){
+
+                }
+            }
             super.handleMessage(msg);
         }
     }

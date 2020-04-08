@@ -24,6 +24,7 @@ public class ClientService extends Service {
     {
         MessageObservable.getInstance().addObserver(observer);
     }
+
     //线程池
     private ClientThreadPool threadPool = new ClientThreadPool(5,10,30,
             TimeUnit.SECONDS, new LinkedBlockingDeque<Runnable>());
