@@ -49,6 +49,12 @@ public class ClientThreadPool extends ThreadPoolExecutor {
         return threads.get(position);
     }
 
+    public boolean reConnect(String id){
+        MQTTClientThread thread = this.findClientThread(id);
+        execute(thread);
+        return true;
+    }
+
     public boolean stopThread(String id){
         MQTTClientThread thread = this.findClientThread(id);
         thread.closeThread();
@@ -57,7 +63,7 @@ public class ClientThreadPool extends ThreadPoolExecutor {
 
     public boolean deleteThread(String id){
         threads.remove(this.findClientThread(id));
-        return this.stopThread(id);
+        return true;
     }
 
     public boolean updateThread(ClientInformation clientInformation){

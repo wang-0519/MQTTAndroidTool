@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -34,7 +35,7 @@ import client.TopicInformation;
 
 public class MessagePageActivity extends AppCompatActivity {
 
-    private TextView messageInput = null;
+    private Button messageInput = null;
     private ListView messagesView = null;
     private ActionBar actionBar = null;
 
@@ -77,7 +78,7 @@ public class MessagePageActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ClientService.class);
         bindService(intent, sc, Service.BIND_AUTO_CREATE);
 
-        if(ti != null && ti.getTpoicType() == TopicInformation.TOPICTYPE.PUBLISH){
+        if(ti.getTpoicType() == TopicInformation.TOPICTYPE.PUBLISH){
             messageInput.setHeight(50);
         }
 

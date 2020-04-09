@@ -113,6 +113,7 @@ public class MainPageActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(iBinder != null){
+            iBinder.setHandler(handler);
             flushView();
         }
     }

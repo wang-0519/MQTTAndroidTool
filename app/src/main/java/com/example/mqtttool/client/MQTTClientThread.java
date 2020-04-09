@@ -64,6 +64,10 @@ public class MQTTClientThread implements Runnable{
         }
     }
 
+    public void connect(){
+        client.connect();
+    }
+
     /**
      * 发布报文
      */

@@ -1,8 +1,11 @@
 package com.example.mqtttool.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -48,6 +51,7 @@ public class HistoryMessage extends AppCompatActivity {
         className = getIntent().getStringExtra("className");
 
         flushView();
+        addListener();
     }
 
     @Override
@@ -99,5 +103,18 @@ public class HistoryMessage extends AppCompatActivity {
             case 14:  return "DisConnect";
         }
         return null;
+    }
+
+    private void addListener(){
+        history.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(HistoryMessage.this, MessageInformationPage.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("uMessage", uMessages.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
     }
 }

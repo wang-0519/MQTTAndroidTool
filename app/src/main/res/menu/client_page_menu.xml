@@ -11,9 +11,18 @@
         app:showAsAction="always"
         android:icon="@drawable/subscribe_1"/>
 
+    <item android:id="@+id/v_m_connect_service"
+        android:title="连接服务器"></item>
+
+    <item android:id="@+id/v_m_disconnect_service"
+        android:title="断开连接"></item>
+
     <item android:id="@+id/v_m_client_setting"
         android:title="@string/s_v_m_client_setting"></item>
 
     <item android:id="@+id/v_m_history_ubytes"
         android:title="历史报文"></item>
+
+    <item android:id="@+id/v_m_delete_client"
+        android:title="删除客户端"></item>
 </menu>

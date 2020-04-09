@@ -88,7 +88,7 @@ public class ClientActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(binder != null){
-            ci = binder.getMQTTClientThread(ci.getId()).getClientInformation();
+            binder.setHandler(handler);
             flushView();
         }
     }
@@ -144,6 +144,24 @@ public class ClientActivity extends AppCompatActivity {
                 bundle.putSerializable("client", ci);
                 bundle.putString("className", "ClientActivity");
                 intent.putExtras(bundle);
+                startActivity(intent);
+            case R.id.v_m_connect_service:
+                if(ci.getState() != ClientInformation.CONN_STATE.CONN){
+                    binder.reConnect(ci.getId());
+                } else {
+                    Toast.makeText(ClientActivity.this, "客户端已连接！", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case R.id.v_m_disconnect_service:
+                if(ci.getState() == ClientInformation.CONN_STATE.CONN){
+                    binder.stopClient(ci.getId());
+                } else {
+                    Toast.makeText(ClientActivity.this, "客户端未连接！", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case R.id.v_m_delete_client:
+                binder.deleteClient(ci.getId());
+                intent = new Intent(ClientActivity.this, MainPageActivity.class);
                 startActivity(intent);
         }
         return false;
@@ -282,18 +300,6 @@ public class ClientActivity extends AppCompatActivity {
                 mapList.add(map);
             }
         }
-//        else{
-//            Map<String, Object> map = new HashMap<>();
-//            map.put("topic", "hello");
-//            map.put("type",TopicInformation.TOPICTYPE.PUBLISH);
-//            mapList.add(map);
-//            TopicInformation topicInformation = new TopicInformation();
-//            topicInformation.setTopicName("hello");
-//            topicInformation.setTpoicType(TopicInformation.TOPICTYPE.PUBLISH);
-//            topicInformation.addMessage(new Message("hello"));
-//            topicInformation.addMessage(new Message("123456"));
-//            ci.addTopic(topicInformation);
-//        }
         SimpleAdapter adapter = new SimpleAdapter(this, mapList, R.layout.topic_adapter_layout,
                 new String[]{"topic","type"}, new int[]{R.id.v_topic_name, R.id.v_topic_type});
         topics.setAdapter(adapter);

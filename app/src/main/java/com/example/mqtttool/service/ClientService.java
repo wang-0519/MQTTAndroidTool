@@ -9,6 +9,7 @@ import com.example.mqtttool.client.ClientThreadPool;
 import com.example.mqtttool.client.MQTTClientThread;
 import com.example.mqtttool.client.MessageObserver;
 import com.example.mqtttool.view.AbsMyHandler;
+import com.example.mqtttool.view.ClientActivity;
 
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -63,8 +64,19 @@ public class ClientService extends Service {
             ClientService.this.threadPool.updateThread(clientInformation);
         }
 
+        public boolean reConnect(String id){
+            return ClientService.this.threadPool.reConnect(id);
+        }
+
         public boolean stopClient(String id){
             return ClientService.this.threadPool.stopThread(id);
+        }
+
+        public boolean deleteClient(String id){
+            if(ClientService.this.threadPool.findClientThread(id).getClientInformation().getState() == ClientInformation.CONN_STATE.CONN){
+                ClientService.this.threadPool.stopThread(id);
+            }
+            return ClientService.this.threadPool.deleteThread(id);
         }
 
         public ArrayList<MQTTClientThread> getClientsThread(){
