@@ -36,6 +36,7 @@ public class MainPageActivity extends AppCompatActivity {
     private ListView createdClients = null;
 
     private List<Map<String, Object>> mapList = null;
+    ArrayList<MQTTClientThread> threads = null;
 
     private ClientInformation ci = null;
 
@@ -70,15 +71,25 @@ public class MainPageActivity extends AppCompatActivity {
         ci = new ClientInformation();
         mapList = new ArrayList<Map<String, Object>>();
 
+        addListener();
+    }
+
+    private void addListener(){
         createdClients.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainPageActivity.this, ClientActivity.class);
-                Bundle bundle = new Bundle();
-                ci = iBinder.getMQTTClientThread(position).getClientInformation();
-                bundle.putSerializable("client",ci);
-                intent.putExtras(bundle);
-                startActivity(intent);
+                System.out.println(view.getId());
+                if(view.getId() == R.id.v_client_is_connect){
+                    iBinder.reConnect(threads.get(position).getClientInformation().getId());
+                    flushView();
+                } else{
+                    Intent intent = new Intent(MainPageActivity.this, ClientActivity.class);
+                    Bundle bundle = new Bundle();
+                    ci = iBinder.getMQTTClientThread(position).getClientInformation();
+                    bundle.putSerializable("client",ci);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
             }
         });
         createClient.setOnClickListener(new View.OnClickListener() {
@@ -95,16 +106,21 @@ public class MainPageActivity extends AppCompatActivity {
 
     private void flushView(){
         mapList.clear();
-        ArrayList<MQTTClientThread> threads = iBinder.getClientsThread();
+        threads = iBinder.getClientsThread();
         for(MQTTClientThread thread : threads){
             ClientInformation ci = thread.getClientInformation();
             Map<String, Object> map = new HashMap<>();
             map.put("name", ci.getName());
             map.put("addr", ci.getAddr());
+            if(ci.getState() == ClientInformation.CONN_STATE.CONN){
+                map.put("isConn",R.drawable.conn_successed);
+            } else {
+                map.put("isConn", R.drawable.conn_error);
+            }
             mapList.add(map);
         }
         SimpleAdapter sa = new SimpleAdapter(this, mapList, R.layout.clients_adapter_layout,
-                new String[]{"name", "addr"}, new int[]{R.id.v_client_name, R.id.v_client_addr});
+                new String[]{"name", "addr", "isConn"}, new int[]{R.id.v_client_name, R.id.v_client_addr, R.id.v_client_is_connect});
         createdClients.setAdapter(sa);
     }
 
@@ -131,6 +147,9 @@ public class MainPageActivity extends AppCompatActivity {
             HelpMess helpMess = (HelpMess)msg.obj;
             if(helpMess.isError()){
                 Toast.makeText(MainPageActivity.this, helpMess.getErrorMessage(), Toast.LENGTH_LONG).show();
+                flushView();
+            } else{
+                flushView();
             }
             super.handleMessage(msg);
         }

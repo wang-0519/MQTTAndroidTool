@@ -82,6 +82,10 @@ public class ClientService extends Service {
         public ArrayList<MQTTClientThread> getClientsThread(){
             return ClientService.this.threadPool.getThreads();
         }
+
+        public void clearHistoryMessage(String id){
+
+        }
     }
 
     @Override

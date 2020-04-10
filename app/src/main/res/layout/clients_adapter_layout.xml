@@ -36,6 +36,12 @@
             android:layout_below="@id/v_client_name"
             android:text="hello"/>
 
+        <ImageView
+            android:id="@+id/v_client_is_connect"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"/>
+
     </RelativeLayout>
 
 </RelativeLayout>

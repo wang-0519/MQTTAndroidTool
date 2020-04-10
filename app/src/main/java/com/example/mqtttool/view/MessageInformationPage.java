@@ -11,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mqtttool.R;
 
-import java.util.Arrays;
-
 import MQTTMessage.AbstractMess;
 import helperClass.Translater;
 

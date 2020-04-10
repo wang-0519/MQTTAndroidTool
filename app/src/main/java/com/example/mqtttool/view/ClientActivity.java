@@ -29,7 +29,6 @@ import com.example.mqtttool.service.ClientService;
 
 import client.ClientInformation;
 import client.HelpMess;
-import client.Message;
 import client.TopicInformation;
 
 import java.util.ArrayList;
@@ -145,26 +144,43 @@ public class ClientActivity extends AppCompatActivity {
                 bundle.putString("className", "ClientActivity");
                 intent.putExtras(bundle);
                 startActivity(intent);
+                return true;
             case R.id.v_m_connect_service:
                 if(ci.getState() != ClientInformation.CONN_STATE.CONN){
                     binder.reConnect(ci.getId());
                 } else {
                     Toast.makeText(ClientActivity.this, "客户端已连接！", Toast.LENGTH_LONG).show();
                 }
-                break;
+                return true;
             case R.id.v_m_disconnect_service:
                 if(ci.getState() == ClientInformation.CONN_STATE.CONN){
                     binder.stopClient(ci.getId());
                 } else {
                     Toast.makeText(ClientActivity.this, "客户端未连接！", Toast.LENGTH_LONG).show();
                 }
-                break;
+                return true;
             case R.id.v_m_delete_client:
-                binder.deleteClient(ci.getId());
-                intent = new Intent(ClientActivity.this, MainPageActivity.class);
-                startActivity(intent);
+                new AlertDialog.Builder(ClientActivity.this)
+                        .setTitle("确认删除？")
+                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                binder.deleteClient(ci.getId());
+                                Intent in = null;
+                                in = new Intent(ClientActivity.this, MainPageActivity.class);
+                                startActivity(in);
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .create()
+                        .show();
+                return true;
         }
-        return false;
+        return super.onOptionsItemSelected(item);
     }
 
     private void subscribeTopic(){

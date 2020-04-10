@@ -1,8 +1,15 @@
 package com.example.mqtttool.view;
 
+import android.app.AlertDialog;
+import android.app.Service;
+import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Message;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +22,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mqtttool.R;
+import com.example.mqtttool.service.ClientService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +44,22 @@ public class HistoryMessage extends AppCompatActivity {
     private String className = null;
     private String clientId = null;
 
+    private ClientService.MyBinder binder = null;
+    private ServiceConnection sc = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            binder = (ClientService.MyBinder)service;
+            binder.clearHistoryMessage(client.getId());
+            client = binder.getMQTTClientThread(client.getId()).getClientInformation();
+            flushView();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
     private ArrayList<AbstractMess> uMessages = null;
     private ArrayList<Message>  cMessages = null;
 
@@ -43,6 +67,7 @@ public class HistoryMessage extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.history_message_page);
+
         history = findViewById(R.id.v_history_message);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -50,8 +75,29 @@ public class HistoryMessage extends AppCompatActivity {
 
         className = getIntent().getStringExtra("className");
 
+        if(className.equals("ClientActivity")){
+            client = (ClientInformation) getIntent().getSerializableExtra("client");
+        } else {
+            clientId = getIntent().getStringExtra("client_id");
+            topic = (TopicInformation) getIntent().getSerializableExtra("topic");
+        }
+
         flushView();
         addListener();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(binder != null){
+            unbindService(sc);
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.history_message_page_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -59,6 +105,26 @@ public class HistoryMessage extends AppCompatActivity {
         switch (item.getItemId()){
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.v_m_history_clear:
+                new AlertDialog.Builder(HistoryMessage.this)
+                        .setTitle("确认清除？")
+                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(className.equals("ClientActivity")){
+                                    Intent intent = new Intent(HistoryMessage.this, ClientService.class);
+                                    bindService(intent, sc, Service.BIND_AUTO_CREATE);
+                                }
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .create()
+                        .show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -68,7 +134,6 @@ public class HistoryMessage extends AppCompatActivity {
         SimpleAdapter sa = null;
         List<Map<String, Object>> mapList = new ArrayList<>();
         if(className.equals("ClientActivity")){
-            client = (ClientInformation) getIntent().getSerializableExtra("client");
             uMessages = client.getHistoryMessage();
             for(AbstractMess absMess : uMessages){
                 Map<String, Object> map = new HashMap<>();
@@ -79,8 +144,6 @@ public class HistoryMessage extends AppCompatActivity {
                     new String[]{"type"}, new int[]{R.id.v_history_message_type});
             history.setAdapter(sa);
         } else {
-            clientId = getIntent().getStringExtra("clientId");
-            topic = (TopicInformation)getIntent().getSerializableExtra("topic");
             cMessages = new ArrayList<>();
         }
     }
@@ -109,11 +172,13 @@ public class HistoryMessage extends AppCompatActivity {
         history.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(HistoryMessage.this, MessageInformationPage.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("uMessage", uMessages.get(position));
-                intent.putExtras(bundle);
-                startActivity(intent);
+                if(className.equals("ClientActivity")) {
+                    Intent intent = new Intent(HistoryMessage.this, MessageInformationPage.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("uMessage", uMessages.get(position));
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
             }
         });
     }

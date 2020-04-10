@@ -18,6 +18,7 @@ public class MQTTClientThread implements Runnable{
     public enum RUNTYPE{CONNECT, CLOSE}
     public RUNTYPE sign = RUNTYPE.CONNECT;
 
+    //客户端信息
     private ClientInformation clientInformation = null;
 
     //锁变量
@@ -51,11 +52,13 @@ public class MQTTClientThread implements Runnable{
         }
     }
 
-
+    /**
+     * 传入、获取客户端信息
+     * @return
+     */
     public ClientInformation getClientInformation() {
         return this.clientInformation;
     }
-
     public void setClientInformation(ClientInformation clientInformation){
         this.clientInformation = clientInformation;
         client.setClient(clientInformation);
@@ -64,6 +67,9 @@ public class MQTTClientThread implements Runnable{
         }
     }
 
+    /**
+     * 连接服务器
+     */
     public void connect(){
         client.connect();
     }
@@ -82,7 +88,6 @@ public class MQTTClientThread implements Runnable{
     public void subscribe(ArrayList<TopicInformation> topic){
         client.subscribe(topic);
     }
-
     public void subscribe(TopicInformation topic){
         ArrayList<TopicInformation> topics = new ArrayList<>();
         topics.add(topic);
@@ -96,7 +101,6 @@ public class MQTTClientThread implements Runnable{
     public void unSubscribe(ArrayList<TopicInformation> topic){
         client.unSubscribe(topic);
     }
-
     public void unsubscribe(TopicInformation topic){
         ArrayList<TopicInformation> topics = new ArrayList<>();
         topics.add(topic);

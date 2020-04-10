@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -81,8 +80,6 @@ public class MessagePageActivity extends AppCompatActivity {
         if(ti.getTpoicType() == TopicInformation.TOPICTYPE.PUBLISH){
             messageInput.setHeight(50);
         }
-
-        addListener();
     }
 
     @Override
@@ -122,15 +119,6 @@ public class MessagePageActivity extends AppCompatActivity {
                 startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void addListener(){
-        messagesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MessagePageActivity.this, messages.get(position).getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     protected void flushView(){

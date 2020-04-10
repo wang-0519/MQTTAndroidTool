@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/v_m_history_clear"
+        android:title="清除记录"
+        android:icon="@drawable/clear"
+        app:showAsAction="always"></item>
+
+</menu>
