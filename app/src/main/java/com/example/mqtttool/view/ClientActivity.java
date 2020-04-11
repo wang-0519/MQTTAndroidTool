@@ -36,6 +36,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 客户端 Activity
+ */
 public class ClientActivity extends AppCompatActivity {
 
     /**
@@ -44,11 +47,16 @@ public class ClientActivity extends AppCompatActivity {
     private ListView topics = null;
     private ActionBar actionBar = null;
 
+    /**
+     * 客户端信息
+     */
     private ClientInformation ci = null;
     private List<Map<String,Object>> mapList = null;
 
+    //Handler对象
     private AbsMyHandler handler = new ClientActivityHandler();
 
+    //ClientService 连接所需变量
     private ClientService.MyBinder binder = null;
     private ServiceConnection sc = new ServiceConnection() {
         @Override
@@ -105,6 +113,11 @@ public class ClientActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * 导航栏按钮接听事件
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent intent = null;
@@ -183,6 +196,9 @@ public class ClientActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 订阅话题的动作
+     */
     private void subscribeTopic(){
         final LinearLayout table = (LinearLayout) getLayoutInflater().inflate(R.layout.subscribe_topic_table, null);
         table.findViewById(R.id.v_t_subscribe_topic_qos).setOnClickListener(new View.OnClickListener() {
@@ -234,6 +250,9 @@ public class ClientActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * 发布话题动作
+     */
     private void publishTopic(){
         final LinearLayout table = (LinearLayout) getLayoutInflater().inflate(R.layout.publish_topic_table, null);
         table.findViewById(R.id.v_t_publish_topic_qos).setOnClickListener(new View.OnClickListener() {
@@ -321,6 +340,9 @@ public class ClientActivity extends AppCompatActivity {
         topics.setAdapter(adapter);
     }
 
+    /**
+     * Handler 类
+     */
     public class ClientActivityHandler extends AbsMyHandler{
         @Override
         public void handleMessage(@NonNull android.os.Message msg) {

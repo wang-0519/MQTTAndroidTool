@@ -30,16 +30,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 主界面
+ */
 public class MainPageActivity extends AppCompatActivity {
 
+    //界面组件
     private Button createClient = null;
     private ListView createdClients = null;
 
+    //填充信息
     private List<Map<String, Object>> mapList = null;
     ArrayList<MQTTClientThread> threads = null;
 
+    //客户端信息
     private ClientInformation ci = null;
 
+    //ClientService 绑定
     private ClientService.MyBinder iBinder = null;
     private ServiceConnection sc = new ServiceConnection() {
         @Override
@@ -55,6 +62,7 @@ public class MainPageActivity extends AppCompatActivity {
         }
     };
 
+    //Handler对象
     private AbsMyHandler handler = new MainPageHandler();
 
     @Override
@@ -74,6 +82,9 @@ public class MainPageActivity extends AppCompatActivity {
         addListener();
     }
 
+    /**
+     * 添加监听器
+     */
     private void addListener(){
         createdClients.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -104,6 +115,9 @@ public class MainPageActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 刷新界面
+     */
     private void flushView(){
         mapList.clear();
         threads = iBinder.getClientsThread();

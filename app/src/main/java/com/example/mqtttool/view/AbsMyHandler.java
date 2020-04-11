@@ -7,6 +7,9 @@ import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 
+/**
+ * Handler 抽象类
+ */
 public class AbsMyHandler extends Handler implements Serializable {
 
     @Override

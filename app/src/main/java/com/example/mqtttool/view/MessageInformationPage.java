@@ -14,17 +14,21 @@ import com.example.mqtttool.R;
 import MQTTMessage.AbstractMess;
 import helperClass.Translater;
 
+/**
+ * 二进制报文查看界面
+ */
 public class MessageInformationPage extends AppCompatActivity {
 
+    //界面组件
     private TextView uFixding = null;
     private TextView fixding = null;
     private TextView uVariable = null;
     private TextView variable = null;
     private TextView uPackage = null;
     private TextView packageInfo = null;
-
     private ActionBar actionBar = null;
 
+    //报文信息
     private AbstractMess message = null;
 
 
@@ -58,6 +62,9 @@ public class MessageInformationPage extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 刷新界面
+     */
     private void flushView(){
         StringBuffer sb = new StringBuffer();
         byte[] uMess = null;

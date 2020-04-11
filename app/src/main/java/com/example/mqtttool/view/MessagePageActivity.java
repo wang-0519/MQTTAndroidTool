@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -32,18 +30,28 @@ import client.HelpMess;
 import client.Message;
 import client.TopicInformation;
 
+/**
+ * 发送或接收消息查看界面
+ */
 public class MessagePageActivity extends AppCompatActivity {
 
+    //界面组件
     private Button messageInput = null;
     private ListView messagesView = null;
     private ActionBar actionBar = null;
 
+    //客户端信息
     private TopicInformation ti = null;
     private String clientId = null;
+
+    //界面填充信息
     private ArrayList<Message> messages = null;
     private List<Map<String, Object>> mapList = null;
 
+    //Handler对象
     private MessagePageHandler handler = null;
+
+    //ClientService 绑定
     private ClientService.MyBinder binder = null;
     private ServiceConnection sc = new ServiceConnection() {
         @Override
@@ -121,6 +129,9 @@ public class MessagePageActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 界面刷新
+     */
     protected void flushView(){
         ti = binder.getMQTTClientThread(clientId).getClientInformation().getTopic(ti.getTopicName());
         if(ti != null){

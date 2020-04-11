@@ -26,6 +26,9 @@ import client.ClientInformation;
 
 import java.util.UUID;
 
+/**
+ * 客户端配置界面
+ */
 public class CreateClientActivity extends AppCompatActivity {
     //判断输入是否符合要求
     private int count = 0;
@@ -47,6 +50,9 @@ public class CreateClientActivity extends AppCompatActivity {
     //返回页面名称
     private String className = null;
 
+    /**
+     * ClientService 绑定所需的变量
+     */
     private ClientService.MyBinder binder = null;
     private ServiceConnection sc = new ServiceConnection() {
         @Override
@@ -107,6 +113,9 @@ public class CreateClientActivity extends AppCompatActivity {
         back = findViewById(R.id.v_back);
     }
 
+    /**
+     * 刷新界面中客户端信息
+     */
     protected void setItemInfo(){
         edits[0].setText(ci.getName());
         edits[1].setText(ci.getId());
@@ -127,6 +136,9 @@ public class CreateClientActivity extends AppCompatActivity {
         checks[5].setChecked(ci.isWillRetain());
     }
 
+    /**
+     * 添加监听器
+     */
     protected void setListener(){
         View.OnClickListener listener = new View.OnClickListener() {
             @Override

@@ -9,6 +9,8 @@ import android.os.Message;
 import com.example.mqtttool.memory.MySQLiteHelper;
 import com.example.mqtttool.memory.SQLiteHandler;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import client.ClientInformation;
@@ -37,7 +39,15 @@ public class MemoryService extends Service {
          * @param clientInformation
          */
         public void insertClient(ClientInformation clientInformation){
-
+            sqLiteHandler.insertClient(clientInformation);
+            File filedir = getExternalFilesDir(clientInformation.getId() + "/publish");
+            if(!filedir.exists()){
+                filedir.mkdirs();
+            }
+            filedir = getExternalFilesDir(clientInformation.getId() + "/subscribe");
+            if(!filedir.exists()){
+                filedir.mkdirs();
+            }
         }
 
         /**
@@ -45,7 +55,14 @@ public class MemoryService extends Service {
          * @param clientInformation
          */
         public void dropClient(ClientInformation clientInformation){
-
+            for(TopicInformation ti : clientInformation.getTopicInformation()){
+                deleteTopicInformation(clientInformation.getId(), ti);
+            }
+            sqLiteHandler.dropClient(clientInformation.getId());
+            File filedir = getExternalFilesDir(clientInformation.getId());
+            if(filedir.exists()){
+                deleteDirWithFiles(filedir);
+            }
         }
 
         /**
@@ -53,7 +70,7 @@ public class MemoryService extends Service {
          * @param clientInformation
          */
         public void updateClient(ClientInformation clientInformation){
-
+            sqLiteHandler.updateClient(clientInformation);
         }
 
         /**
@@ -61,7 +78,7 @@ public class MemoryService extends Service {
          * @return
          */
         public ArrayList<ClientInformation> getAllClient(){
-            return null;
+            return sqLiteHandler.getAllClient();
         }
 
         /**
@@ -70,7 +87,7 @@ public class MemoryService extends Service {
          * @param topicInformation
          */
         public void addTopicInformation(String clientId, TopicInformation topicInformation){
-
+            sqLiteHandler.addTopicInformation(clientId, topicInformation);
         }
 
         /**
@@ -79,7 +96,11 @@ public class MemoryService extends Service {
          * @param topicInformation
          */
         public void deleteTopicInformation(String clientId, TopicInformation topicInformation){
-
+            sqLiteHandler.deleteTopicInformation(clientId, topicInformation);
+            File filedir = getExternalFilesDir(clientId + sqLiteHandler.setTopicType(topicInformation.getTpoicType()));
+            if(filedir.exists()){
+                deleteDirWithFiles(filedir);
+            }
         }
 
         /**
@@ -93,12 +114,48 @@ public class MemoryService extends Service {
         }
 
         /**
+         * 添加消息到历史记录
+         * @param clientId
+         * @param topicInformation
+         * @param message
+         */
+        public void addHistory(String clientId, TopicInformation topicInformation, client.Message message){
+            try{
+                File filedir = getExternalFilesDir(clientId + "/" + sqLiteHandler.setTopicType(topicInformation.getTpoicType()));
+                if(!filedir.exists()){
+                    filedir.mkdirs();
+                }
+                String fileName = filedir.getPath() + File.separator + topicInformation.getTopicName() + ".txt";
+                FileOutputStream fos = new FileOutputStream(fileName);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        /**
          * 清空历史记录
          * @param clientId
          * @param topicInformation
          */
         public void clearHistory(String clientId, TopicInformation topicInformation){
+            File filedir = getExternalFilesDir(clientId + "/" + sqLiteHandler.setTopicType(topicInformation.getTpoicType()));
+            File file = new File(filedir.getPath() + File.separator + topicInformation.getTopicName() + ".txt");
+            if(file.isFile() && file.exists()){
+                file.delete();
+            }
+        }
 
+        /**
+         * 删除文件及目录
+         * @param file
+         */
+        private void deleteDirWithFiles(File file){
+            if(!file.isFile()){
+                for(File fi : file.listFiles()){
+                    deleteDirWithFiles(fi);
+                }
+            }
+            file.delete();
         }
     }
 }

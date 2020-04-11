@@ -34,16 +34,22 @@ import client.ClientInformation;
 import client.TopicInformation;
 import helperClass.BytesHandler;
 
+/**
+ * 历史记录查看界面
+ */
 public class HistoryMessage extends AppCompatActivity {
 
+    //界面组件
     private ListView history = null;
     private ActionBar actionBar = null;
 
+    //客户端信息
     private ClientInformation client = null;
     private TopicInformation topic = null;
     private String className = null;
     private String clientId = null;
 
+    //ClientService 绑定
     private ClientService.MyBinder binder = null;
     private ServiceConnection sc = new ServiceConnection() {
         @Override
@@ -60,6 +66,7 @@ public class HistoryMessage extends AppCompatActivity {
         }
     };
 
+    //界面信息填充内容
     private ArrayList<AbstractMess> uMessages = null;
     private ArrayList<Message>  cMessages = null;
 
@@ -130,6 +137,7 @@ public class HistoryMessage extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //刷新界面，填充 ListView
     private void flushView(){
         SimpleAdapter sa = null;
         List<Map<String, Object>> mapList = new ArrayList<>();
@@ -148,6 +156,7 @@ public class HistoryMessage extends AppCompatActivity {
         }
     }
 
+    //获取报文类型
     private String getMessType(AbstractMess message){
         switch (BytesHandler.getTypeOfMessage(message.getTypeOfMess()[0])){
             case 1:  return "Connect";
@@ -168,6 +177,9 @@ public class HistoryMessage extends AppCompatActivity {
         return null;
     }
 
+    /**
+     * 添加监听器
+     */
     private void addListener(){
         history.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
