@@ -236,7 +236,7 @@ public class ClientActivity extends AppCompatActivity {
                         ti.setTpoicType(TopicInformation.TOPICTYPE.SUBSCRIBE);
                         ti.setTopicName(((EditText)(table.findViewById(R.id.v_t_subscribe_topic_name))).getText().toString());
                         ti.setQos(((EditText)(table.findViewById(R.id.v_t_subscribe_topic_qos))).getText().toString());
-                        binder.getMQTTClientThread(ci.getId()).subscribe(ti);
+                        binder.subscribe(ci.getId() ,ti);
                         flushView();
                     }
                 })
@@ -290,7 +290,7 @@ public class ClientActivity extends AppCompatActivity {
                         ti.setTpoicType(TopicInformation.TOPICTYPE.PUBLISH);
                         ti.setTopicName(((EditText)(table.findViewById(R.id.v_t_publish_topic_name))).getText().toString());
                         ti.setQos(((EditText)(table.findViewById(R.id.v_t_publish_topic_qos))).getText().toString());
-                        binder.getMQTTClientThread(ci.getId()).getClientInformation().addTopic(ti);
+                        binder.publishTopic(ci.getId() ,ti);
                         flushView();
                     }
                 })

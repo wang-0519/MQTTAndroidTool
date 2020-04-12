@@ -1,7 +1,9 @@
 package com.example.mqtttool.service;
 
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 
@@ -15,9 +17,29 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
 import client.ClientInformation;
+import client.Message;
+import client.TopicInformation;
 import messageHandler.MessageObservable;
 
 public class ClientService extends Service {
+
+    private MemoryService.MemoryBinder memoryBinder = null;
+    private ServiceConnection sc = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            memoryBinder = (MemoryService.MemoryBinder)iBinder;
+            ArrayList<ClientInformation> clients = memoryBinder.getAllClient();
+            for(ClientInformation client : clients){
+                MQTTClientThread thread = new MQTTClientThread(client);
+                ClientService.this.threadPool.execute(thread);
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+        }
+    };
 
     //消息观察者
     private MessageObserver observer = new MessageObserver();
@@ -77,6 +99,7 @@ public class ClientService extends Service {
          * @param clientInformation
          */
         public void newClient(ClientInformation clientInformation){
+            ClientService.this.memoryBinder.insertClient(clientInformation);
             MQTTClientThread thread = new MQTTClientThread(clientInformation);
             ClientService.this.threadPool.execute(thread);
         }
@@ -86,6 +109,7 @@ public class ClientService extends Service {
          * @param clientInformation
          */
         public void updateClient(ClientInformation clientInformation){
+            ClientService.this.memoryBinder.updateClient(clientInformation);
             ClientService.this.threadPool.updateThread(clientInformation);
         }
 
@@ -113,6 +137,7 @@ public class ClientService extends Service {
          * @return
          */
         public boolean deleteClient(String id){
+            ClientService.this.memoryBinder.dropClient(getMQTTClientThread(id).getClientInformation());
             if(ClientService.this.threadPool.findClientThread(id).getClientInformation().getState() == ClientInformation.CONN_STATE.CONN){
                 ClientService.this.threadPool.stopThread(id);
             }
@@ -134,29 +159,86 @@ public class ClientService extends Service {
         public void clearHistoryMessage(String id){
 
         }
+
+        /**
+         * 订阅主题
+         * @param clientId
+         * @param topicInformation
+         */
+        public void subscribe(String clientId, TopicInformation topicInformation){
+            getMQTTClientThread(clientId).subscribe(topicInformation);
+            ClientService.this.memoryBinder.addTopicInformation(clientId, topicInformation);
+        }
+
+        /**
+         * 发布主题
+         * @param clientId
+         * @param topicInformation
+         */
+        public void publishTopic(String clientId, TopicInformation topicInformation){
+            getMQTTClientThread(clientId).getClientInformation().addTopic(topicInformation);
+            ClientService.this.memoryBinder.addTopicInformation(clientId, topicInformation);
+        }
+
+        /**
+         * 删除话题
+         * @param clientId
+         * @param topicInformation
+         */
+        public void deleteTopicInformation(String clientId, TopicInformation topicInformation){
+            ClientService.this.memoryBinder.deleteTopicInformation(clientId, topicInformation);
+            getMQTTClientThread(clientId).getClientInformation().deleteTopic(topicInformation);
+        }
+
+        /**
+         * 发布报文
+         * @param clientId
+         * @param topicInformation
+         * @param message
+         */
+        public void publish(String clientId, TopicInformation topicInformation, Message message){
+
+        }
+
+        /**
+         * 添加报文到历史记录
+         * @param clientId
+         * @param topicInformation
+         * @param message
+         */
+        public void addHistory(String clientId, TopicInformation topicInformation, Message message){
+            ClientService.this.memoryBinder.addHistory(clientId, topicInformation, message);
+        }
+
+        /**
+         * 清除历史记录，某主题的历史记录
+         * @param clientId
+         * @param topicInformation
+         */
+        public void clearHistory(String clientId, TopicInformation topicInformation){
+            ClientService.this.memoryBinder.clearHistory(clientId, topicInformation);
+        }
     }
 
     @Override
     public void onCreate() {
-        System.out.println("Service++++++++onCreate()");
         super.onCreate();
+        Intent intent = new Intent(ClientService.this, MemoryService.class);
+        bindService(intent, sc, Service.BIND_AUTO_CREATE);
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        System.out.println("Service++++++++++onBind()");
         return binder;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        System.out.println("Service++++++++++onStartCommand()");
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        System.out.println("Service++++++++++++++onUnbind");
         return super.onUnbind(intent);
     }
 }

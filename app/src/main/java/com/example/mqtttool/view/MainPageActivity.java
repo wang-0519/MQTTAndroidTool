@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.mqtttool.R;
 import com.example.mqtttool.client.MQTTClientThread;
 import com.example.mqtttool.service.ClientService;
+import com.example.mqtttool.service.MemoryService;
 
 import client.ClientInformation;
 import client.HelpMess;
@@ -47,12 +48,12 @@ public class MainPageActivity extends AppCompatActivity {
     private ClientInformation ci = null;
 
     //ClientService 绑定
-    private ClientService.MyBinder iBinder = null;
+    private ClientService.MyBinder binder = null;
     private ServiceConnection sc = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            iBinder = (ClientService.MyBinder)service;
-            iBinder.setHandler(handler);
+            binder = (ClientService.MyBinder)service;
+            binder.setHandler(handler);
             flushView();
         }
 
@@ -61,6 +62,24 @@ public class MainPageActivity extends AppCompatActivity {
 
         }
     };
+
+//    //MemoryService 绑定
+//    private MemoryService.MemoryBinder memoryBinder = null;
+//    private ServiceConnection msc = new ServiceConnection() {
+//        @Override
+//        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+//            memoryBinder = (MemoryService.MemoryBinder)iBinder;
+//            ArrayList<ClientInformation> clients = memoryBinder.getAllClient();
+//            for(ClientInformation ci : clients){
+//
+//            }
+//        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName componentName) {
+//
+//        }
+//    };
 
     //Handler对象
     private AbsMyHandler handler = new MainPageHandler();
@@ -91,12 +110,12 @@ public class MainPageActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 System.out.println(view.getId());
                 if(view.getId() == R.id.v_client_is_connect){
-                    iBinder.reConnect(threads.get(position).getClientInformation().getId());
+                    binder.reConnect(threads.get(position).getClientInformation().getId());
                     flushView();
                 } else{
                     Intent intent = new Intent(MainPageActivity.this, ClientActivity.class);
                     Bundle bundle = new Bundle();
-                    ci = iBinder.getMQTTClientThread(position).getClientInformation();
+                    ci = binder.getMQTTClientThread(position).getClientInformation();
                     bundle.putSerializable("client",ci);
                     intent.putExtras(bundle);
                     startActivity(intent);
@@ -120,7 +139,7 @@ public class MainPageActivity extends AppCompatActivity {
      */
     private void flushView(){
         mapList.clear();
-        threads = iBinder.getClientsThread();
+        threads = binder.getClientsThread();
         for(MQTTClientThread thread : threads){
             ClientInformation ci = thread.getClientInformation();
             Map<String, Object> map = new HashMap<>();
@@ -142,15 +161,15 @@ public class MainPageActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(iBinder != null){
-            iBinder.setHandler(handler);
+        if(binder != null){
+            binder.setHandler(handler);
             flushView();
         }
     }
 
     @Override
     protected void onDestroy() {
-        iBinder.deleteHandler(handler);
+        binder.deleteHandler(handler);
         unbindService(sc);
         super.onDestroy();
     }

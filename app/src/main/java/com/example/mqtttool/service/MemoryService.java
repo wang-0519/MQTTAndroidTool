@@ -4,13 +4,17 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.Message;
 
 import com.example.mqtttool.memory.MySQLiteHelper;
 import com.example.mqtttool.memory.SQLiteHandler;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import client.ClientInformation;
@@ -97,7 +101,7 @@ public class MemoryService extends Service {
          */
         public void deleteTopicInformation(String clientId, TopicInformation topicInformation){
             sqLiteHandler.deleteTopicInformation(clientId, topicInformation);
-            File filedir = getExternalFilesDir(clientId + sqLiteHandler.setTopicType(topicInformation.getTpoicType()));
+            File filedir = getExternalFilesDir(clientId + "/" + sqLiteHandler.setTopicType(topicInformation.getTpoicType()) + "/" + topicInformation.getTopicName() + ".txt");
             if(filedir.exists()){
                 deleteDirWithFiles(filedir);
             }
@@ -109,8 +113,28 @@ public class MemoryService extends Service {
          * @param topicInformation
          * @return
          */
-        public ArrayList<Message> getHistory(String clientId, TopicInformation topicInformation){
-            return null;
+        public ArrayList<client.Message> getHistory(String clientId, TopicInformation topicInformation){
+            ArrayList<client.Message> history = new ArrayList<>();
+            try{
+                File filedir = getExternalFilesDir(clientId + "/" + sqLiteHandler.setTopicType(topicInformation.getTpoicType())+ "/" + topicInformation.getTopicName() + ".txt");
+                if(filedir.exists() && filedir.isFile()){
+                    BufferedReader br = new BufferedReader(new FileReader(filedir));
+                    String str = null;
+                    while((str = br.readLine()) != null){
+                        String[] temps = str.split(" ");
+                        client.Message mess = new client.Message(temps[0]);
+                        mess.setTime(temps[1]);
+                        mess.setQos(temps[2].charAt(0) - '0');
+                        mess.setRetain(sqLiteHandler.integerToBoolean(temps[3].charAt(0) - '0'));
+                        history.add(mess);
+                    }
+                }
+            }catch (FileNotFoundException nfe){
+                nfe.printStackTrace();
+            }catch (IOException ioe){
+                ioe.printStackTrace();
+            }
+            return history;
         }
 
         /**
@@ -127,6 +151,11 @@ public class MemoryService extends Service {
                 }
                 String fileName = filedir.getPath() + File.separator + topicInformation.getTopicName() + ".txt";
                 FileOutputStream fos = new FileOutputStream(fileName);
+                PrintWriter pw = new PrintWriter(fos);
+                pw.println(message.getMessage() + " " + message.getTime() + " " + message.getQos() + " " + sqLiteHandler.boolToInteger(message.isRetain()));
+                pw.flush();
+                pw.close();
+                fos.close();
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -140,7 +169,7 @@ public class MemoryService extends Service {
         public void clearHistory(String clientId, TopicInformation topicInformation){
             File filedir = getExternalFilesDir(clientId + "/" + sqLiteHandler.setTopicType(topicInformation.getTpoicType()));
             File file = new File(filedir.getPath() + File.separator + topicInformation.getTopicName() + ".txt");
-            if(file.isFile() && file.exists()){
+            if(file.exists() && file.isFile()){
                 file.delete();
             }
         }

@@ -1,7 +1,9 @@
 package com.example.mqtttool.view;
 
+import android.app.AlertDialog;
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -125,6 +127,27 @@ public class MessagePageActivity extends AppCompatActivity {
                 bundle.putString("clientId", clientId);
                 intent.putExtras(bundle);
                 startActivity(intent);
+                return true;
+            case R.id.v_m_delete_topic:
+                new AlertDialog.Builder(MessagePageActivity.this)
+                        .setTitle("确认删除？")
+                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                binder.deleteTopicInformation(clientId, ti);
+                                Intent in = null;
+                                in = new Intent(MessagePageActivity.this, ClientActivity.class);
+                                startActivity(in);
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .create()
+                        .show();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

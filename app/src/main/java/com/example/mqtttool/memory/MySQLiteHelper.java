@@ -36,7 +36,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "m_queue_qos integer," +
                 "m_will_retain integer)");
         db.execSQL("create table if not exists t_topic_information(" +
-                "m_topic_id int primary key AUTOINCREMENT," +
+                "m_topic_id Integer primary key AUTOINCREMENT," +
                 "m_client_id varchar not null," +
                 "m_topic_name varchar not null," +
                 "m_topic_type varchar not null," +

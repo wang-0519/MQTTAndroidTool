@@ -26,25 +26,39 @@ public class SQLiteHandler {
      */
     public void insertClient(ClientInformation clientInformation){
         try{
-            setter.execSQL("insert into t_client_information valuse('"
-                    + clientInformation.getId() + "','"
-                    + clientInformation.getName() + "','"
-                    + clientInformation.getAddr() + "','"
-                    + clientInformation.getUserName() + "','"
-                    + clientInformation.getPassword() + "','"
-                    + clientInformation.getReconnPeriod() + ","
-                    + clientInformation.getConnTimeout() + ","
-                    + clientInformation.getKeepAlive() + ",'"
-                    + clientInformation.getWillTopic() + "',"
-                    + clientInformation.getWillQos() + ",'"
-                    + clientInformation.getWillMessage() + "',"
-                    + boolToInteger(clientInformation.isReschedulePing()) +","
-                    + boolToInteger(clientInformation.isCleanSession()) + ","
-                    + boolToInteger(clientInformation.isAutoConn()) + ","
-                    + boolToInteger(clientInformation.isMqttVersion()) + ","
-                    + boolToInteger(clientInformation.isQueueQos0()) + ","
-                    + boolToInteger(clientInformation.isWillRetain())
-                    +")");
+            String sql = "insert into t_client_information values("
+                    + "'" + clientInformation.getId()
+                    + "','" + clientInformation.getName()
+                    + "','" + clientInformation.getAddr()
+                    + "','" + clientInformation.getUserName()
+                    + "',";
+            if(clientInformation.getPassword() != null){
+                sql = sql + "'" + clientInformation.getPassword() + "',";
+            } else {
+                sql = sql + "null,";
+            }
+            sql = sql + clientInformation.getReconnPeriod()
+                    + "," + clientInformation.getConnTimeout()
+                    + "," + clientInformation.getKeepAlive()
+                    + ",";
+            if(clientInformation.getWillTopic() != null){
+                sql = sql + "'" + clientInformation.getWillTopic() + "',";
+            } else {
+                sql = sql + "null,";
+            }
+            sql = sql + clientInformation.getWillQos();
+            if(clientInformation.getWillMessage() != null){
+                sql = sql + ",'" + clientInformation.getWillMessage() + "',";
+            } else {
+                sql = sql + ",null,";
+            }
+            sql = sql + boolToInteger(clientInformation.isReschedulePing())
+                    + "," + boolToInteger(clientInformation.isCleanSession())
+                    + "," + boolToInteger(clientInformation.isAutoConn())
+                    + "," + boolToInteger(clientInformation.isMqttVersion())
+                    + "," + boolToInteger(clientInformation.isQueueQos0())
+                    + "," + boolToInteger(clientInformation.isWillRetain()) + ");";
+            setter.execSQL(sql);
         }catch (Exception e){
             String error = "保存失败";
             System.out.println(error);
@@ -59,7 +73,7 @@ public class SQLiteHandler {
 
     //integer 转 boolean
     public boolean integerToBoolean(int i){
-        return i == 0;
+        return i == 1;
     }
 
     /**
@@ -69,7 +83,7 @@ public class SQLiteHandler {
     public ArrayList<ClientInformation> getAllClient(){
         ArrayList<ClientInformation> clients = new ArrayList<>();
         try{
-            Cursor cursor = getter.rawQuery("select * from t_client_information", null);
+            Cursor cursor = getter.rawQuery("select * from t_client_information;", null);
             for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
                 ClientInformation ci = new ClientInformation();
                 ci.setId(cursor.getString(0));
@@ -89,7 +103,7 @@ public class SQLiteHandler {
                 ci.setMqttVersion(integerToBoolean(cursor.getInt(14)));
                 ci.setQueueQos0(integerToBoolean(cursor.getInt(15)));
                 ci.setWillRetain(integerToBoolean(cursor.getInt(16)));
-                Cursor cu = getter.rawQuery("select * from t_topic_information where m_client_id = '" + ci.getId() + "'", null);
+                Cursor cu = getter.rawQuery("select * from t_topic_information where m_client_id = '" + ci.getId() + "';", null);
                 for(cu.moveToFirst(); !cu.isAfterLast(); cu.moveToNext()){
                     TopicInformation ti = new TopicInformation();
                     ti.setTopicName(cu.getString(2));
@@ -137,7 +151,7 @@ public class SQLiteHandler {
             if(clientInformation.getWillMessage() != null){
                 sql = sql + ", m_will_message = '" + clientInformation.getWillMessage() + "'";
             }
-            sql = sql + "where m_client_id = '" + clientInformation.getId() + "'";
+            sql = sql + " where m_client_id = '" + clientInformation.getId() + "';";
             setter.execSQL(sql);
         }catch (Exception e){
             String error = "更新失败";
@@ -151,8 +165,8 @@ public class SQLiteHandler {
      * @param clientId
      */
     public void dropClient(String clientId){
-        getter.execSQL("delete from t_client_information where m_client_id = '" + clientId + "'");
-        getter.execSQL("delete from t_topic_information where m_client_id = '" + clientId + "'");
+        getter.execSQL("delete from t_client_information where m_client_id = '" + clientId + "';");
+        getter.execSQL("delete from t_topic_information where m_client_id = '" + clientId + "';");
     }
 
     /**
@@ -166,7 +180,7 @@ public class SQLiteHandler {
                 + topicInformation.getTopicName() + "','"
                 + setTopicType(topicInformation.getTpoicType()) + "',"
                 + topicInformation.getQos() + ",'"
-                + clientId + "/" + setTopicType(topicInformation.getTpoicType()) + "/" + topicInformation.getTopicName() + ".txt')");
+                + clientId + "/" + setTopicType(topicInformation.getTpoicType()) + "/" + topicInformation.getTopicName() + ".txt');");
     }
     //topicType 转 String
     public String setTopicType(TopicInformation.TOPICTYPE type){
@@ -194,7 +208,7 @@ public class SQLiteHandler {
     public void deleteTopicInformation(String clientId, TopicInformation topicInformation){
         setter.execSQL("delete from t_topic_information where m_client_id = '" + clientId
                 + "' and m_topic_name = '" + topicInformation.getTopicName()
-                + "' and m_topic_type = '" + setTopicType(topicInformation.getTpoicType()) + "'");
+                + "' and m_topic_type = '" + setTopicType(topicInformation.getTpoicType()) + "';");
     }
 
 
