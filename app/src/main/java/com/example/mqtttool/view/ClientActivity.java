@@ -313,6 +313,7 @@ public class ClientActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ClientActivity.this, MessagePageActivity.class);
                 Bundle bundle = new Bundle();
+                binder.setNewFalse(ci.getId(), ci.getTopicInformation().get(position));
                 bundle.putSerializable("topic",ci.getTopicInformation().get(position));
                 bundle.putString("client_id", ci.getId());
                 intent.putExtras(bundle);
@@ -332,11 +333,17 @@ public class ClientActivity extends AppCompatActivity {
                 Map<String, Object> map = new HashMap<>();
                 map.put("topic", ti.getTopicName());
                 map.put("type",ti.getTpoicType());
+                map.put("Qos", "Qos" + ti.getQos());
+                if(ti.hasNew()){
+                    map.put("hasNew", R.drawable.new_message);
+                } else {
+                    map.put("hasNew",null);
+                }
                 mapList.add(map);
             }
         }
         SimpleAdapter adapter = new SimpleAdapter(this, mapList, R.layout.topic_adapter_layout,
-                new String[]{"topic","type"}, new int[]{R.id.v_topic_name, R.id.v_topic_type});
+                new String[]{"topic","type","Qos","hasNew"}, new int[]{R.id.v_topic_name, R.id.v_topic_type, R.id.v_topic_Qos, R.id.v_topic_has_new});
         topics.setAdapter(adapter);
     }
 
@@ -351,7 +358,7 @@ public class ClientActivity extends AppCompatActivity {
                 Toast.makeText(ClientActivity.this, helpMess.getErrorMessage(), Toast.LENGTH_LONG).show();
             } else {
                 if(helpMess.getId().equals(ci.getId())){
-
+                    flushView();
                 }
             }
             super.handleMessage(msg);

@@ -103,15 +103,6 @@ public class SQLiteHandler {
                 ci.setMqttVersion(integerToBoolean(cursor.getInt(14)));
                 ci.setQueueQos0(integerToBoolean(cursor.getInt(15)));
                 ci.setWillRetain(integerToBoolean(cursor.getInt(16)));
-                Cursor cu = getter.rawQuery("select * from t_topic_information where m_client_id = '" + ci.getId() + "';", null);
-                for(cu.moveToFirst(); !cu.isAfterLast(); cu.moveToNext()){
-                    TopicInformation ti = new TopicInformation();
-                    ti.setTopicName(cu.getString(2));
-                    ti.setTpoicType(getTopicType(cu.getString(3)));
-                    ti.setQos(cu.getInt(4));
-                    //ti.setFilePath(cu.getString(5));
-                    ci.addTopic(ti);
-                }
                 clients.add(ci);
             }
             cursor.close();
@@ -120,6 +111,25 @@ public class SQLiteHandler {
             e.printStackTrace();
         }
         return clients;
+    }
+
+    /**
+     * 获取某一客户端订阅发布的话题信息
+     * @param clientInformation
+     * @return
+     */
+    public ArrayList<TopicInformation> getTopics(ClientInformation clientInformation){
+        ArrayList<TopicInformation> topics = new ArrayList<>();
+        Cursor cu = getter.rawQuery("select * from t_topic_information where m_client_id = '" + clientInformation.getId() + "';", null);
+        for(cu.moveToFirst(); !cu.isAfterLast(); cu.moveToNext()){
+            TopicInformation ti = new TopicInformation();
+            ti.setTopicName(cu.getString(2));
+            ti.setTpoicType(getTopicType(cu.getString(3)));
+            ti.setQos(cu.getInt(4));
+            //ti.setFilePath(cu.getString(5));
+            topics.add(ti);
+        }
+        return topics;
     }
 
     /**

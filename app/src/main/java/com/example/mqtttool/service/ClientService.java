@@ -30,7 +30,7 @@ public class ClientService extends Service {
             memoryBinder = (MemoryService.MemoryBinder)iBinder;
             ArrayList<ClientInformation> clients = memoryBinder.getAllClient();
             for(ClientInformation client : clients){
-                MQTTClientThread thread = new MQTTClientThread(client);
+                MQTTClientThread thread = new MQTTClientThread(client, memoryBinder.getTopics(client));
                 ClientService.this.threadPool.execute(thread);
             }
         }
@@ -100,7 +100,7 @@ public class ClientService extends Service {
          */
         public void newClient(ClientInformation clientInformation){
             ClientService.this.memoryBinder.insertClient(clientInformation);
-            MQTTClientThread thread = new MQTTClientThread(clientInformation);
+            MQTTClientThread thread = new MQTTClientThread(clientInformation, null);
             ClientService.this.threadPool.execute(thread);
         }
 
@@ -157,7 +157,7 @@ public class ClientService extends Service {
          * @param id
          */
         public void clearHistoryMessage(String id){
-
+            getMQTTClientThread(id).clearHistory();
         }
 
         /**
@@ -197,7 +197,8 @@ public class ClientService extends Service {
          * @param message
          */
         public void publish(String clientId, TopicInformation topicInformation, Message message){
-
+            getMQTTClientThread(clientId).publish(topicInformation, message);
+            addHistory(clientId, topicInformation, message);
         }
 
         /**
@@ -217,6 +218,34 @@ public class ClientService extends Service {
          */
         public void clearHistory(String clientId, TopicInformation topicInformation){
             ClientService.this.memoryBinder.clearHistory(clientId, topicInformation);
+        }
+
+        /**
+         * 设置客户端某话题没有新消息
+         * @param clientId
+         * @param ti
+         */
+        public void setNewFalse(String clientId, TopicInformation ti){
+            getMQTTClientThread(clientId).setNewFalse(ti);
+        }
+
+        /**
+         * 刷新某客户端是否有新消息
+         * @param clienId
+         */
+        public void flushClientOfNew(String clienId){
+            getMQTTClientThread(clienId).flushClientHasNew();
+        }
+
+        /**
+         * 刷新所有客户端是否有新消息
+         */
+        public void flushAllClientOfNew(){
+            for(MQTTClientThread thread : ClientService.this.threadPool.getThreads()){
+                if(thread.getClientInformation().getState() == ClientInformation.CONN_STATE.CONN){
+                    thread.flushClientHasNew();
+                }
+            }
         }
     }
 

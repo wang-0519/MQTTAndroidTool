@@ -38,6 +38,7 @@ public class MessageObserver extends AbstractMessageObserver {
      */
     public void deleteHandler(Handler handler){
         this.handlers.remove(handler);
+        this.handler = this.handlers.get(handlers.size() - 1);
     }
 
     /**

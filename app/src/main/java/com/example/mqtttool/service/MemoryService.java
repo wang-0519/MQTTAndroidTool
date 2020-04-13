@@ -86,6 +86,15 @@ public class MemoryService extends Service {
         }
 
         /**
+         * 获取客户端订阅发布的话题
+         * @param clientInformation
+         * @return
+         */
+        public ArrayList<TopicInformation> getTopics(ClientInformation clientInformation){
+            return sqLiteHandler.getTopics(clientInformation);
+        }
+
+        /**
          * 添加话题信息
          * @param clientId
          * @param topicInformation

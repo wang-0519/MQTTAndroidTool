@@ -156,18 +156,19 @@ public class MessagePageActivity extends AppCompatActivity {
      * 界面刷新
      */
     protected void flushView(){
-        ti = binder.getMQTTClientThread(clientId).getClientInformation().getTopic(ti.getTopicName());
+        ti = binder.getMQTTClientThread(clientId).getClientInformation().getTopic(ti.getTopicName(), ti.getTpoicType());
         if(ti != null){
             mapList.clear();
             messages = ti.getMessages();
             for(Message message : messages){
                 Map<String, Object> map = new HashMap<>();
                 map.put("message", message.getMessage());
-                map.put("time", message.getTime());
+                String info = "Qos:Qos" + message.getQos() + "\nisRetain:" + message.isRetain() + "\ntime:" + message.getTime();
+                map.put("info", info);
                 mapList.add(map);
             }
             SimpleAdapter adapter = new SimpleAdapter(this, mapList,R.layout.message_page_adapter_layout,
-                    new String[]{"message","time"}, new int[]{R.id.v_message_what, R.id.v_message_info});
+                    new String[]{"message","info"}, new int[]{R.id.v_message_what, R.id.v_message_info});
             messagesView.setAdapter(adapter);
         }
     }
@@ -181,6 +182,7 @@ public class MessagePageActivity extends AppCompatActivity {
             } else{
                 if(helpMess.getId().equals(clientId) && helpMess.getTopic().equals(ti.getTopicName()) && ti.getTpoicType() == TopicInformation.TOPICTYPE.SUBSCRIBE){
                     flushView();
+                    MessagePageActivity.this.binder.setNewFalse(clientId, ti);
                 }
             }
             super.handleMessage(msg);

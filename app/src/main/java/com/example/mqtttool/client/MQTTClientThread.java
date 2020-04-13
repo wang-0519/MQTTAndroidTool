@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import client.ClientInformation;
 import client.MQTTClient;
+import client.Message;
 import client.TopicInformation;
 
 /**
@@ -21,16 +22,28 @@ public class MQTTClientThread implements Runnable{
     //客户端信息
     private ClientInformation clientInformation = null;
 
+    private ArrayList<TopicInformation> topics = null;
+
     //锁变量
     private byte[] by = new byte[0];
 
-    public MQTTClientThread(ClientInformation clientInformation){
+    public MQTTClientThread(ClientInformation clientInformation, ArrayList<TopicInformation> topics){
         this.clientInformation = clientInformation;
+        this.topics = topics;
     }
 
     @Override
     public void run() {
         client = new MQTTClient(clientInformation);
+        if(topics != null && topics.size() != 0){
+            for(TopicInformation topicInformation : topics){
+                if(topicInformation.getTpoicType() == TopicInformation.TOPICTYPE.PUBLISH){
+                    client.getClient().addTopic(topicInformation);
+                } else{
+                    this.subscribe(topicInformation);
+                }
+            }
+        }
         while(sign != RUNTYPE.CLOSE){
             synchronized (by){
                 try{
@@ -77,8 +90,8 @@ public class MQTTClientThread implements Runnable{
     /**
      * 发布报文
      */
-    public void publish(int qos, boolean retain, String topic, String mess){
-        client.publish(qos,retain,topic,mess);
+    public void publish(TopicInformation topic, Message message){
+        client.publish(topic, message);
     }
 
 
@@ -107,4 +120,25 @@ public class MQTTClientThread implements Runnable{
         client.unSubscribe(topics);
     }
 
+    /**
+     * 清除历史记录
+     */
+    public void clearHistory(){
+        client.clearHistory();
+    }
+
+    /**
+     * 设置某话题没有新消息
+     * @param topicInformation
+     */
+    public void setNewFalse(TopicInformation topicInformation){
+        client.getClient().setNewFalse(topicInformation);
+    }
+
+    /**
+     * 刷新客户端新消息标志
+     */
+    public void flushClientHasNew(){
+        client.getClient().flushNew();
+    }
 }

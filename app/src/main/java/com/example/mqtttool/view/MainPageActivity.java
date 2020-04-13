@@ -63,23 +63,6 @@ public class MainPageActivity extends AppCompatActivity {
         }
     };
 
-//    //MemoryService 绑定
-//    private MemoryService.MemoryBinder memoryBinder = null;
-//    private ServiceConnection msc = new ServiceConnection() {
-//        @Override
-//        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-//            memoryBinder = (MemoryService.MemoryBinder)iBinder;
-//            ArrayList<ClientInformation> clients = memoryBinder.getAllClient();
-//            for(ClientInformation ci : clients){
-//
-//            }
-//        }
-//
-//        @Override
-//        public void onServiceDisconnected(ComponentName componentName) {
-//
-//        }
-//    };
 
     //Handler对象
     private AbsMyHandler handler = new MainPageHandler();
@@ -139,6 +122,7 @@ public class MainPageActivity extends AppCompatActivity {
      */
     private void flushView(){
         mapList.clear();
+        binder.flushAllClientOfNew();
         threads = binder.getClientsThread();
         for(MQTTClientThread thread : threads){
             ClientInformation ci = thread.getClientInformation();
@@ -150,10 +134,15 @@ public class MainPageActivity extends AppCompatActivity {
             } else {
                 map.put("isConn", R.drawable.conn_error);
             }
+            if(ci.hasNew()){
+                map.put("hasNew",R.drawable.new_message);
+            } else {
+                map.put("hasNew", null);
+            }
             mapList.add(map);
         }
         SimpleAdapter sa = new SimpleAdapter(this, mapList, R.layout.clients_adapter_layout,
-                new String[]{"name", "addr", "isConn"}, new int[]{R.id.v_client_name, R.id.v_client_addr, R.id.v_client_is_connect});
+                new String[]{"name", "addr", "isConn", "hasNew"}, new int[]{R.id.v_client_name, R.id.v_client_addr, R.id.v_client_is_connect, R.id.v_client_has_new});
         createdClients.setAdapter(sa);
     }
 

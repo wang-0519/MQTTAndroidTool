@@ -38,9 +38,17 @@
 
         <ImageView
             android:id="@+id/v_client_is_connect"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"/>
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"/>
+
+        <ImageView
+            android:id="@+id/v_client_has_new"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_toLeftOf="@+id/v_client_is_connect"
+            android:layout_marginRight="10dp"/>
 
     </RelativeLayout>
 
