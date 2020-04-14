@@ -27,6 +27,8 @@
 
         <activity android:name=".view.MessageInformationPage" android:launchMode="singleTask"></activity>
 
+        <activity android:name=".view.PublishMessagePageActivity" android:launchMode="singleTask"></activity>
+
         <service android:name=".service.ClientService"></service>
 
         <service android:name=".service.MemoryService"></service>

@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -38,7 +39,7 @@ import client.TopicInformation;
 public class MessagePageActivity extends AppCompatActivity {
 
     //界面组件
-    private Button messageInput = null;
+    private LinearLayout messageInput = null;
     private ListView messagesView = null;
     private ActionBar actionBar = null;
 
@@ -73,23 +74,20 @@ public class MessagePageActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message_page);
-        messageInput = findViewById(R.id.v_message_input);
+//        messageInput = findViewById(R.id.v_message_publish);
         messagesView = findViewById(R.id.v_messages_view);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         mapList = new ArrayList<Map<String, Object>>();
         ti = (TopicInformation) getIntent().getSerializableExtra("topic");
+        System.out.println("+++++++++++++++" + ti.getTpoicType());
         clientId = getIntent().getStringExtra("client_id");
         setTitle("话题:" + ti.getTopicName());
         handler = new MessagePageHandler();
 
         Intent intent = new Intent(this, ClientService.class);
         bindService(intent, sc, Service.BIND_AUTO_CREATE);
-
-        if(ti.getTpoicType() == TopicInformation.TOPICTYPE.PUBLISH){
-            messageInput.setHeight(50);
-        }
     }
 
     @Override
@@ -119,6 +117,18 @@ public class MessagePageActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.v_m_message_publish:
+                if(ti.getTpoicType() == TopicInformation.TOPICTYPE.PUBLISH){
+                    Intent intent = new Intent(MessagePageActivity.this, PublishMessagePageActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("clientId", clientId);
+                    bundle.putSerializable("topic",ti);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(MessagePageActivity.this, "订阅主题不可用", Toast.LENGTH_LONG).show();
+                }
+                return true;
             case R.id.v_m_history:
                 Intent intent = new Intent(MessagePageActivity.this, HistoryMessage.class);
                 Bundle bundle = new Bundle();
@@ -130,7 +140,7 @@ public class MessagePageActivity extends AppCompatActivity {
                 return true;
             case R.id.v_m_delete_topic:
                 new AlertDialog.Builder(MessagePageActivity.this)
-                        .setTitle("确认删除？")
+                        .setTitle("确认删除此话题所有相关信息？")
                         .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

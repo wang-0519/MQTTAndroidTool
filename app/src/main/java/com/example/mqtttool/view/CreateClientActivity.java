@@ -172,6 +172,7 @@ public class CreateClientActivity extends AppCompatActivity {
                     case R.id.v_will_qos:
                         PopupMenu popupMenu = new PopupMenu(CreateClientActivity.this, v);
                         getMenuInflater().inflate(R.menu.qos_popup_menu, popupMenu.getMenu());
+                        popupMenu.show();
                         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @Override
                             public boolean onMenuItemClick(MenuItem item) {

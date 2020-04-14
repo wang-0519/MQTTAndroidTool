@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/v_publish_help1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Qos:"/>
+
+        <EditText
+            style="@style/ConnEditView"
+            android:id="@+id/v_publish_message_qos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Qos0"
+            android:editable="false"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/v_publish_help2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/v_publish_help1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="isRetain"/>
+
+        <CheckBox
+            android:id="@+id/v_publish_message_retain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/v_publish_help3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/v_publish_help2">
+
+        <RadioGroup
+            android:id="@+id/v_publish_message_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+        <RadioButton
+            android:id="@+id/v_b_string"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="字符串"
+            android:paddingRight="20dp"/>
+
+
+        <RadioButton
+            android:id="@+id/v_b_bin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="二进制"
+            android:paddingRight="20dp"/>
+
+
+        <RadioButton
+            android:id="@+id/v_b_hex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="十六进制" />
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/v_publish_help4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/v_publish_help3"
+        android:layout_above="@+id/v_publish_help5">
+
+        <EditText
+            android:id="@+id/v_publish_message"
+            style="@style/MainPageBorder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/v_publish_help5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:id="@+id/v_publish_button"
+            style="@style/MainPageBorder"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="发布报文"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

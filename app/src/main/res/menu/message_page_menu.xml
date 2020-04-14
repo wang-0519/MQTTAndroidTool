@@ -1,9 +1,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/v_m_message_publish"
+        android:title="发布报文"
+        app:showAsAction="always"
+        android:icon="@drawable/publish_1"></item>
+
     <item android:id="@+id/v_m_history"
-        android:title="查看历史记录"></item>
+        android:title="查看历史记录"
+        app:showAsAction="always"
+        android:icon="@drawable/history"></item>
 
     <item android:id="@+id/v_m_delete_topic"
-        android:title="删除话题"></item>
+        android:title="删除话题"
+        app:showAsAction="always"
+        android:icon="@drawable/delete"></item>
 </menu>

@@ -14,18 +14,6 @@
                 android:orientation="vertical">
             </ListView>
 
-            <Button
-                style="@style/MainPageBorder"
-                android:id="@+id/v_message_input"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:text="发布报文"
-                android:gravity="center"
-                android:textSize="30sp"
-                android:layout_alignParentBottom="true"
-                android:orientation="horizontal">
-            </Button>
-
         </RelativeLayout>
 
 </LinearLayout>
