@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -62,6 +61,7 @@ public class MessagePageActivity extends AppCompatActivity {
             binder = (ClientService.MyBinder)service;
             binder.setHandler(handler);
             flushView();
+            handler.setBinder(binder);
         }
 
         @Override
@@ -74,7 +74,6 @@ public class MessagePageActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message_page);
-//        messageInput = findViewById(R.id.v_message_publish);
         messagesView = findViewById(R.id.v_messages_view);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);

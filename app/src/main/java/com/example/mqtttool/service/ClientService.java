@@ -168,7 +168,11 @@ public class ClientService extends Service {
          */
         public void subscribe(String clientId, TopicInformation topicInformation){
             getMQTTClientThread(clientId).subscribe(topicInformation);
-            ClientService.this.memoryBinder.addTopicInformation(clientId, topicInformation);
+            if(getMQTTClientThread(clientId).getClientInformation().getTopic(topicInformation.getTopicName(), topicInformation.getTpoicType()) != null){
+                ClientService.this.memoryBinder.updateTopicInformation(clientId, topicInformation);
+            } else {
+                ClientService.this.memoryBinder.addTopicInformation(clientId, topicInformation);
+            }
         }
 
         /**
@@ -178,7 +182,11 @@ public class ClientService extends Service {
          */
         public void publishTopic(String clientId, TopicInformation topicInformation){
             getMQTTClientThread(clientId).getClientInformation().addTopic(topicInformation);
-            ClientService.this.memoryBinder.addTopicInformation(clientId, topicInformation);
+            if(getMQTTClientThread(clientId).getClientInformation().getTopic(topicInformation.getTopicName(), topicInformation.getTpoicType()) != null){
+                ClientService.this.memoryBinder.updateTopicInformation(clientId, topicInformation);
+            } else {
+                ClientService.this.memoryBinder.addTopicInformation(clientId, topicInformation);
+            }
         }
 
         /**
@@ -210,6 +218,16 @@ public class ClientService extends Service {
          */
         public void addHistory(String clientId, TopicInformation topicInformation, Message message){
             ClientService.this.memoryBinder.addHistory(clientId, topicInformation, message);
+        }
+
+        /**
+         * 获取历史记录
+         * @param clientId
+         * @param topicInformation
+         * @return
+         */
+        public ArrayList<Message> getHistory(String clientId, TopicInformation topicInformation){
+            return ClientService.this.memoryBinder.getHistory(clientId, topicInformation);
         }
 
         /**

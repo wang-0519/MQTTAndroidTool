@@ -126,7 +126,6 @@ public class SQLiteHandler {
             ti.setTopicName(cu.getString(2));
             ti.setTpoicType(getTopicType(cu.getString(3)));
             ti.setQos(cu.getInt(4));
-            //ti.setFilePath(cu.getString(5));
             topics.add(ti);
         }
         return topics;
@@ -208,6 +207,19 @@ public class SQLiteHandler {
             return TopicInformation.TOPICTYPE.PUBLISH;
         }
         return TopicInformation.TOPICTYPE.SUBSCRIBE;
+    }
+
+    /**
+     * 更新话题Qos
+     * @param clientId
+     * @param topicInformation
+     */
+    public void updateTopicQos(String clientId, TopicInformation topicInformation){
+        String sql = "update t_topic_information set m_topic_qos = " + topicInformation.getQos()
+                + " where m_client_id = '" + clientId
+                + "' and m_topic_name = '" + topicInformation.getTopicName()
+                + "' and m_topic_type = '" + setTopicType(topicInformation.getTpoicType()) + "';";
+        setter.execSQL(sql);
     }
 
     /**

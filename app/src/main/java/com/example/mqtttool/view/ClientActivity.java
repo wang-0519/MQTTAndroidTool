@@ -64,6 +64,7 @@ public class ClientActivity extends AppCompatActivity {
             binder = (ClientService.MyBinder)service;
             binder.setHandler(handler);
             flushView();
+            handler.setBinder(binder);
         }
 
         @Override

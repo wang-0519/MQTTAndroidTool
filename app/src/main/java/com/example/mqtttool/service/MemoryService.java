@@ -10,6 +10,7 @@ import com.example.mqtttool.memory.SQLiteHandler;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -104,6 +105,15 @@ public class MemoryService extends Service {
         }
 
         /**
+         * 更新话题信息
+         * @param clientId
+         * @param topicInformation
+         */
+        public void updateTopicInformation(String clientId, TopicInformation topicInformation){
+            sqLiteHandler.addTopicInformation(clientId, topicInformation);
+        }
+
+        /**
          * 删除话题信息
          * @param clientId
          * @param topicInformation
@@ -125,9 +135,14 @@ public class MemoryService extends Service {
         public ArrayList<client.Message> getHistory(String clientId, TopicInformation topicInformation){
             ArrayList<client.Message> history = new ArrayList<>();
             try{
-                File filedir = getExternalFilesDir(clientId + "/" + sqLiteHandler.setTopicType(topicInformation.getTpoicType())+ "/" + topicInformation.getTopicName() + ".txt");
-                if(filedir.exists() && filedir.isFile()){
-                    BufferedReader br = new BufferedReader(new FileReader(filedir));
+                File filedir = getExternalFilesDir(clientId + "/" + sqLiteHandler.setTopicType(topicInformation.getTpoicType()));
+                if(!filedir.exists()){
+                    return history;
+                }
+                String fileName = filedir.getPath() + File.separator + topicInformation.getTopicName() + ".txt";
+                if(new File(fileName).exists()){
+                    FileReader file = new FileReader(fileName);
+                    BufferedReader br = new BufferedReader(file);
                     String str = null;
                     while((str = br.readLine()) != null){
                         String[] temps = str.split(" ");
@@ -138,10 +153,8 @@ public class MemoryService extends Service {
                         history.add(mess);
                     }
                 }
-            }catch (FileNotFoundException nfe){
-                nfe.printStackTrace();
-            }catch (IOException ioe){
-                ioe.printStackTrace();
+            }catch (Exception nfe){
+                return history;
             }
             return history;
         }
@@ -159,7 +172,7 @@ public class MemoryService extends Service {
                     filedir.mkdirs();
                 }
                 String fileName = filedir.getPath() + File.separator + topicInformation.getTopicName() + ".txt";
-                FileOutputStream fos = new FileOutputStream(fileName);
+                FileOutputStream fos = new FileOutputStream(fileName, true);
                 PrintWriter pw = new PrintWriter(fos);
                 pw.println(message.getMessage() + " " + message.getTime() + " " + message.getQos() + " " + sqLiteHandler.boolToInteger(message.isRetain()));
                 pw.flush();
@@ -177,10 +190,8 @@ public class MemoryService extends Service {
          */
         public void clearHistory(String clientId, TopicInformation topicInformation){
             File filedir = getExternalFilesDir(clientId + "/" + sqLiteHandler.setTopicType(topicInformation.getTpoicType()));
-            File file = new File(filedir.getPath() + File.separator + topicInformation.getTopicName() + ".txt");
-            if(file.exists() && file.isFile()){
-                file.delete();
-            }
+            String file = filedir.getPath() + File.separator + topicInformation.getTopicName() + ".txt";
+            deleteDirWithFiles(new File(file));
         }
 
         /**
@@ -188,7 +199,10 @@ public class MemoryService extends Service {
          * @param file
          */
         private void deleteDirWithFiles(File file){
-            if(!file.isFile()){
+            if(!file.exists()){
+                return;
+            }
+            if(file.isDirectory()){
                 for(File fi : file.listFiles()){
                     deleteDirWithFiles(fi);
                 }

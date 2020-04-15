@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +30,7 @@ import java.util.Map;
 
 import MQTTMessage.AbstractMess;
 import client.ClientInformation;
+import client.Message;
 import client.TopicInformation;
 import helperClass.BytesHandler;
 
@@ -55,9 +55,10 @@ public class HistoryMessage extends AppCompatActivity {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             binder = (ClientService.MyBinder)service;
-            binder.clearHistoryMessage(client.getId());
-            client = binder.getMQTTClientThread(client.getId()).getClientInformation();
-            flushView();
+            if(!className.equals("ClientActivity")){
+                cMessages = binder.getHistory(clientId, topic);
+                flushView();
+            }
         }
 
         @Override
@@ -85,9 +86,12 @@ public class HistoryMessage extends AppCompatActivity {
         if(className.equals("ClientActivity")){
             client = (ClientInformation) getIntent().getSerializableExtra("client");
         } else {
-            clientId = getIntent().getStringExtra("client_id");
+            clientId = getIntent().getStringExtra("clientId");
             topic = (TopicInformation) getIntent().getSerializableExtra("topic");
         }
+
+        Intent intent = new Intent(HistoryMessage.this, ClientService.class);
+        bindService(intent, sc, Service.BIND_AUTO_CREATE);
 
         flushView();
         addListener();
@@ -120,9 +124,12 @@ public class HistoryMessage extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if(className.equals("ClientActivity")){
-                                    Intent intent = new Intent(HistoryMessage.this, ClientService.class);
-                                    bindService(intent, sc, Service.BIND_AUTO_CREATE);
+                                    binder.clearHistoryMessage(client.getId());
+                                    client = binder.getMQTTClientThread(client.getId()).getClientInformation();
+                                } else {
+                                    binder.clearHistory(clientId, topic);
                                 }
+                                flushView();
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -152,7 +159,21 @@ public class HistoryMessage extends AppCompatActivity {
                     new String[]{"type"}, new int[]{R.id.v_history_message_type});
             history.setAdapter(sa);
         } else {
-            cMessages = new ArrayList<>();
+            if(binder != null){
+                cMessages = binder.getHistory(clientId, topic);
+            }
+            if(cMessages != null){
+                for(Message message : cMessages){
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("message", message.getMessage());
+                    String info = "Qos:Qos" + message.getQos() + "\nisRetain:" + message.isRetain() + "\ntime:" + message.getTime();
+                    map.put("info", info);
+                    mapList.add(map);
+                }
+                sa = new SimpleAdapter(this, mapList, R.layout.message_page_adapter_layout,
+                        new String[]{"message","info"}, new int[]{R.id.v_message_what, R.id.v_message_info});
+                history.setAdapter(sa);
+            }
         }
     }
 

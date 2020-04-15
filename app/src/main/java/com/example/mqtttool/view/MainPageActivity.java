@@ -54,6 +54,7 @@ public class MainPageActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             binder = (ClientService.MyBinder)service;
             binder.setHandler(handler);
+            handler.setBinder(binder);
             flushView();
         }
 
