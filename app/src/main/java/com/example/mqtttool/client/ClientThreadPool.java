@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import client.ClientInformation;
+import client.TopicInformation;
 
 public class ClientThreadPool extends ThreadPoolExecutor {
 
@@ -63,8 +64,9 @@ public class ClientThreadPool extends ThreadPoolExecutor {
      * @param id
      * @return
      */
-    public boolean reConnect(String id){
+    public boolean reConnect(String id, ArrayList<TopicInformation> topics){
         MQTTClientThread thread = this.findClientThread(id);
+        thread.setTopics(topics);
         execute(thread);
         return true;
     }

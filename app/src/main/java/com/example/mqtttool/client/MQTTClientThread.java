@@ -36,12 +36,17 @@ public class MQTTClientThread implements Runnable{
     public void run() {
         client = new MQTTClient(clientInformation);
         if(topics != null && topics.size() != 0){
+            clientInformation.getTopicInformation().clear();
+            ArrayList<TopicInformation> subtopics = new ArrayList<>();
             for(TopicInformation topicInformation : topics){
                 if(topicInformation.getTpoicType() == TopicInformation.TOPICTYPE.PUBLISH){
                     client.getClient().addTopic(topicInformation);
                 } else{
-                    this.subscribe(topicInformation);
+                    subtopics.add(topicInformation);
                 }
+            }
+            if(subtopics.size() != 0){
+                subscribe(subtopics);
             }
         }
         while(sign != RUNTYPE.CLOSE){
@@ -118,6 +123,14 @@ public class MQTTClientThread implements Runnable{
         ArrayList<TopicInformation> topics = new ArrayList<>();
         topics.add(topic);
         client.unSubscribe(topics);
+    }
+
+    /**
+     * 传入话题信息
+     * @param topics
+     */
+    public void setTopics(ArrayList<TopicInformation> topics){
+        this.topics = topics;
     }
 
     /**

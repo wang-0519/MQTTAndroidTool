@@ -81,7 +81,6 @@ public class MessagePageActivity extends AppCompatActivity {
 
         mapList = new ArrayList<Map<String, Object>>();
         ti = (TopicInformation) getIntent().getSerializableExtra("topic");
-        System.out.println("+++++++++++++++" + ti.getTpoicType());
         clientId = getIntent().getStringExtra("client_id");
         setTitle("话题:" + ti.getTopicName());
         handler = new MessagePageHandler();

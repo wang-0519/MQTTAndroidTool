@@ -119,7 +119,8 @@ public class ClientService extends Service {
          * @return
          */
         public boolean reConnect(String id){
-            return ClientService.this.threadPool.reConnect(id);
+            ClientInformation ci = getMQTTClientThread(id).getClientInformation();
+            return ClientService.this.threadPool.reConnect(id, memoryBinder.getTopics(ci));
         }
 
         /**
