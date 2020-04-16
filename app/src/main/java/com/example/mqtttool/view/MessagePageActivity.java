@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import client.ClientInformation;
 import client.HelpMess;
 import client.Message;
 import client.TopicInformation;
@@ -117,6 +118,10 @@ public class MessagePageActivity extends AppCompatActivity {
                 return true;
             case R.id.v_m_message_publish:
                 if(ti.getTpoicType() == TopicInformation.TOPICTYPE.PUBLISH){
+                    if(binder.getMQTTClientThread(clientId).getClientInformation().getState() != ClientInformation.CONN_STATE.CONN){
+                        Toast.makeText(MessagePageActivity.this, "未连接服务器！", Toast.LENGTH_LONG).show();
+                        return false;
+                    }
                     Intent intent = new Intent(MessagePageActivity.this, PublishMessagePageActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("clientId", clientId);

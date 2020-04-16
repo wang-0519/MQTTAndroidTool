@@ -2,6 +2,7 @@ package com.example.mqtttool.view;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.mqtttool.R;
 
 import MQTTMessage.AbstractMess;
+import helperClass.BytesHandler;
 import helperClass.Translater;
 
 /**
@@ -20,6 +22,7 @@ import helperClass.Translater;
 public class MessageInformationPage extends AppCompatActivity {
 
     //界面组件
+    private RadioGroup radio = null;
     private TextView uFixding = null;
     private TextView fixding = null;
     private TextView uVariable = null;
@@ -40,6 +43,7 @@ public class MessageInformationPage extends AppCompatActivity {
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        radio = findViewById(R.id.v_bin_history_type);
         uFixding = findViewById(R.id.v_message_ufixding);
         fixding = findViewById(R.id.v_message_fixding);
         uVariable = findViewById(R.id.v_message_uvariable);
@@ -49,6 +53,7 @@ public class MessageInformationPage extends AppCompatActivity {
 
         message = (AbstractMess)getIntent().getSerializableExtra("uMessage");
 
+        addListener();
         flushView();
     }
 
@@ -60,6 +65,23 @@ public class MessageInformationPage extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 添加监听器
+     */
+    private void addListener(){
+        radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (radioGroup.getCheckedRadioButtonId()){
+                    case R.id.v_bin_history_bin:
+                        break;
+                    case R.id.v_bin_history_hex:
+                        break;
+                }
+            }
+        });
     }
 
     /**
@@ -87,6 +109,26 @@ public class MessageInformationPage extends AppCompatActivity {
                 sb.append(Translater.byteToBin(by) + "\n");
             }
             uPackage.setText(sb.toString());
+        }
+
+        switch (BytesHandler.getTypeOfMessage(message.getFixedHeader()[0])){
+            case 1:
+                String str = "报文类型：Connect\n剩余长度：" +  message.getOther_mess().get("remain_length");
+                fixding.setText(str);
+                break;
+            case 2: break;
+            case 3: break;
+            case 4: break;
+            case 5: break;
+            case 6: break;
+            case 7: break;
+            case 8: break;
+            case 9: break;
+            case 10: break;
+            case 11: break;
+            case 12: break;
+            case 13: break;
+            case 14: break;
         }
     }
 }

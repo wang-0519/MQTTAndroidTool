@@ -12,6 +12,35 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:id="@+id/v_bin_history_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/v_bin_history_bin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="二进制"
+                        android:checked="true"
+                        android:paddingRight="20dp"/>
+
+                    <RadioButton
+                        android:id="@+id/v_bin_history_hex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="十六进制" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
