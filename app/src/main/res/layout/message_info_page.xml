@@ -44,7 +44,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="固定报头"/>
+                android:text="固定报头"
+                android:paddingLeft="20dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,18 +56,22 @@
                     android:id="@+id/v_message_ufixding"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"/>
+                    android:layout_weight="5"
+                    android:paddingLeft="40dp" />
                 <TextView
                     android:id="@+id/v_message_fixding"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"/>
+                    android:layout_weight="5"
+                    android:paddingBottom="10dp"
+                    android:paddingRight="10dp"/>
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="可变报头"/>
+                android:text="可变报头"
+                android:paddingLeft="20dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -77,18 +82,22 @@
                     android:id="@+id/v_message_uvariable"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"/>
+                    android:layout_weight="5"
+                    android:paddingLeft="40dp"/>
                 <TextView
                     android:id="@+id/v_message_variable"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"/>
+                    android:layout_weight="5"
+                    android:paddingBottom="10dp"
+                    android:paddingRight="10dp"/>
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="有效载荷"/>
+                android:text="有效载荷"
+                android:paddingLeft="20dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -99,12 +108,14 @@
                     android:id="@+id/v_message_upackage"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"/>
+                    android:layout_weight="5"
+                    android:paddingLeft="40dp"/>
                 <TextView
                     android:id="@+id/v_message_package"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"/>
+                    android:layout_weight="5"
+                    android:paddingRight="10dp"/>
             </LinearLayout>
 
         </LinearLayout>

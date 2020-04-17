@@ -169,7 +169,8 @@ public class ClientService extends Service {
         public void subscribe(String clientId, TopicInformation topicInformation){
             getMQTTClientThread(clientId).subscribe(topicInformation);
             if(getMQTTClientThread(clientId).getClientInformation().getTopic(topicInformation.getTopicName(), topicInformation.getTpoicType()) != null){
-                ClientService.this.memoryBinder.updateTopicInformation(clientId, topicInformation);
+                ClientService.this.memoryBinder.deleteTopicInformation(clientId, topicInformation);
+                ClientService.this.memoryBinder.addTopicInformation(clientId, topicInformation);
             } else {
                 ClientService.this.memoryBinder.addTopicInformation(clientId, topicInformation);
             }
