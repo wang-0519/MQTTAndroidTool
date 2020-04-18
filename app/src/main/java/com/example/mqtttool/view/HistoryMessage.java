@@ -13,7 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +35,7 @@ import client.ClientInformation;
 import client.Message;
 import client.TopicInformation;
 import helperClass.BytesHandler;
+import helperClass.Translater;
 
 /**
  * 历史记录查看界面
@@ -211,6 +214,57 @@ public class HistoryMessage extends AppCompatActivity {
                     bundle.putSerializable("uMessage", uMessages.get(position));
                     intent.putExtras(bundle);
                     startActivity(intent);
+                } else {
+                    RelativeLayout table = (RelativeLayout)getLayoutInflater().inflate(R.layout.message_info_table, null);
+                    final byte[] bytes = Translater.strToBin(cMessages.get(position).getMessage());
+                    final TextView messageInfo = table.findViewById(R.id.v_message_t_text);
+                    String str = "";
+                    int count = 0;
+                    while(count < bytes.length){
+                        str += bytes[count++] + " ";
+                    }
+                    messageInfo.setText(str);
+                    table.findViewById(R.id.v_message_t_bin).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String str = "";
+                            int count = 0;
+                            while(count < bytes.length){
+                                str += (Translater.byteToBin(bytes[count++]) + "  ");
+                            }
+                            messageInfo.setText(str);
+                        }
+                    });
+                    table.findViewById(R.id.v_message_t_integer).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String str = "";
+                            int count = 0;
+                            while(count < bytes.length){
+                                str += (bytes[count++]) + " ";
+                            }
+                            messageInfo.setText(str);
+                        }
+                    });
+                    table.findViewById(R.id.v_message_t_hex).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String str = "";
+                            int count = 0;
+                            while(count < bytes.length){
+                                str += (Translater.byteToHex(bytes[count++])) + " ";
+                            }
+                            messageInfo.setText(str);
+                        }
+                    });
+                    new AlertDialog.Builder(HistoryMessage.this)
+                            .setTitle("报文查看")
+                            .setView(table)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            }).show();
                 }
             }
         });

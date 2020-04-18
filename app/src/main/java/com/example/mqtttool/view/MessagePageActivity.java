@@ -10,9 +10,13 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,6 +36,7 @@ import client.ClientInformation;
 import client.HelpMess;
 import client.Message;
 import client.TopicInformation;
+import helperClass.Translater;
 
 /**
  * 发送或接收消息查看界面
@@ -39,7 +44,6 @@ import client.TopicInformation;
 public class MessagePageActivity extends AppCompatActivity {
 
     //界面组件
-    private LinearLayout messageInput = null;
     private ListView messagesView = null;
     private ActionBar actionBar = null;
 
@@ -87,6 +91,8 @@ public class MessagePageActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, ClientService.class);
         bindService(intent, sc, Service.BIND_AUTO_CREATE);
+
+        addListener();
     }
 
     @Override
@@ -163,6 +169,64 @@ public class MessagePageActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void addListener(){
+        messagesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                RelativeLayout table = (RelativeLayout)getLayoutInflater().inflate(R.layout.message_info_table, null);
+                final byte[] bytes = Translater.strToBin(ti.getMessages().get(i).getMessage());
+                final TextView messageInfo = table.findViewById(R.id.v_message_t_text);
+                String str = "";
+                int count = 0;
+                while(count < bytes.length){
+                    str += bytes[count++] + " ";
+                }
+                messageInfo.setText(str);
+                table.findViewById(R.id.v_message_t_bin).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String str = "";
+                        int count = 0;
+                        while(count < bytes.length){
+                            str += (Translater.byteToBin(bytes[count++]) + "  ");
+                        }
+                        messageInfo.setText(str);
+                    }
+                });
+                table.findViewById(R.id.v_message_t_integer).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String str = "";
+                        int count = 0;
+                        while(count < bytes.length){
+                            str += (bytes[count++]) + " ";
+                        }
+                        messageInfo.setText(str);
+                    }
+                });
+                table.findViewById(R.id.v_message_t_hex).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String str = "";
+                        int count = 0;
+                        while(count < bytes.length){
+                            str += (Translater.byteToHex(bytes[count++])) + " ";
+                        }
+                        messageInfo.setText(str);
+                    }
+                });
+                new AlertDialog.Builder(MessagePageActivity.this)
+                        .setTitle("报文查看")
+                        .setView(table)
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        }).show();
+            }
+        });
     }
 
     /**

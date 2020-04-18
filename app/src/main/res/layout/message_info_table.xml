@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:id="@+id/v_message_t_radio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp">
+        <RadioButton
+            android:id="@+id/v_message_t_bin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="二进制"
+            android:paddingRight="20dp"/>
+        <RadioButton
+            android:id="@+id/v_message_t_hex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="十六进制"
+            android:paddingRight="20dp"/>
+        <RadioButton
+            android:id="@+id/v_message_t_integer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="utf-8"
+            android:paddingRight="20dp"
+            android:checked="true"/>
+    </RadioGroup>
+
+    <TextView
+        style="@style/MainPageBorder"
+        android:id="@+id/v_message_t_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/v_message_t_radio"/>
+
+</RelativeLayout>

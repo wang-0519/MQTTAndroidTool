@@ -97,7 +97,8 @@
             style="@style/MainPageBorder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="top"/>
+            android:gravity="top"
+            android:hint="@string/s_v_example"/>
 
     </LinearLayout>
 

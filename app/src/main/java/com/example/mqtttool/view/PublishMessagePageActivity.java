@@ -24,6 +24,7 @@ import com.example.mqtttool.service.ClientService;
 
 import client.Message;
 import client.TopicInformation;
+import helperClass.Translater;
 
 public class PublishMessagePageActivity extends AppCompatActivity {
 
@@ -140,11 +141,21 @@ public class PublishMessagePageActivity extends AppCompatActivity {
         publishQos.setOnClickListener(listener);
         publish.setOnClickListener(listener);
 
-        publishType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-
-            }
-        });
+//        publishType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+//                switch (radioGroup.getCheckedRadioButtonId()){
+//                    case R.id.v_b_string:
+//                        publishMessage.setText("");
+//                        break;
+//                    case R.id.v_b_bin:
+//                        publishMessage.setText("0b ");
+//                        break;
+//                    case R.id.v_b_hex:
+//                        publishMessage.setText("0x ");
+//                        break;
+//                }
+//            }
+//        });
     }
 }

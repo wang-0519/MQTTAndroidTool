@@ -3,4 +3,8 @@
     <string name="s_v_m_publish">发布报文主题</string>
     <string name="s_v_m_subcribe">订阅主题</string>
     <string name="s_v_m_client_setting">客户端配置</string>
+    <string name="s_v_example">eg:\n
+      字符串： hello\n
+      二进制： 00000001 00000010\n
+      十六进制：0A 1B\n</string>
 </resources>
