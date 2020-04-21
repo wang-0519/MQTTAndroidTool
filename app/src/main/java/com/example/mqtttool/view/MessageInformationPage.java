@@ -157,7 +157,11 @@ public class MessageInformationPage extends AppCompatActivity {
                 break;
             case 8:
             case 10:
-                str = "报文类型：SubScribe\n剩余长度：" + message.getOther_mess().get("remainLength");
+                if(temp == 8){
+                    str = "报文类型：Subscribe\n剩余长度：" + message.getOther_mess().get("remainLen");
+                } else {
+                    str = "报文类型：Unsubscribe\n剩余长度：" + message.getOther_mess().get("remainLen");
+                }
                 fixding.setText(str);
                 str = "<-报文标识符";
                 variable.setText(str);
@@ -175,7 +179,11 @@ public class MessageInformationPage extends AppCompatActivity {
                 break;
             case 9:
             case 11:
-                str = "报文类型：SubAck\n剩余长度：" + message.getOther_mess().get("remainLength");
+                if( temp == 9){
+                    str = "报文类型：SubAck\n剩余长度：" + message.getOther_mess().get("remainLength");
+                } else {
+                    str = "报文类型：UnsubAck\n剩余长度：" + message.getOther_mess().get("remainLength");
+                }
                 fixding.setText(str);
                 str = "<-报文标识符";
                 variable.setText(str);

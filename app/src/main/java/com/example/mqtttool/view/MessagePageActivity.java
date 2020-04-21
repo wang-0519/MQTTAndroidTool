@@ -148,8 +148,14 @@ public class MessagePageActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.v_m_delete_topic:
+                String str = null;
+                if( ti.getTpoicType() == TopicInformation.TOPICTYPE.SUBSCRIBE){
+                    str = "确认取消订阅此话题并删除所有相关信息？";
+                } else{
+                    str = "确认删除此话题所有相关信息？";
+                }
                 new AlertDialog.Builder(MessagePageActivity.this)
-                        .setTitle("确认删除此话题所有相关信息？")
+                        .setTitle(str)
                         .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -176,7 +182,7 @@ public class MessagePageActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 RelativeLayout table = (RelativeLayout)getLayoutInflater().inflate(R.layout.message_info_table, null);
-                final byte[] bytes = Translater.strToBin(ti.getMessages().get(i).getMessage());
+                final byte[] bytes = ti.getMessages().get(i).getBytes();
                 final TextView messageInfo = table.findViewById(R.id.v_message_t_text);
                 String str = "";
                 int count = 0;

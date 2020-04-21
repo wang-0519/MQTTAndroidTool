@@ -216,7 +216,7 @@ public class HistoryMessage extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                     RelativeLayout table = (RelativeLayout)getLayoutInflater().inflate(R.layout.message_info_table, null);
-                    final byte[] bytes = Translater.strToBin(cMessages.get(position).getMessage());
+                    final byte[] bytes = cMessages.get(position).getBytes();
                     final TextView messageInfo = table.findViewById(R.id.v_message_t_text);
                     String str = "";
                     int count = 0;

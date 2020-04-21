@@ -23,7 +23,7 @@ public class AbsMyHandler extends Handler implements Serializable {
     public void handleMessage(@NonNull Message msg) {
         super.handleMessage(msg);
         HelpMess helpMess = (HelpMess)msg.obj;
-        if( ! helpMess.isError()){
+        if(helpMess.getType() == HelpMess.HELP_MESS_TYPE.RECIVE){
             binder.addHistory(helpMess.getId(),
                     binder.getMQTTClientThread(helpMess.getId()).getClientInformation().getTopic(helpMess.getTopic(), TopicInformation.TOPICTYPE.SUBSCRIBE),
                     helpMess.getMessage());

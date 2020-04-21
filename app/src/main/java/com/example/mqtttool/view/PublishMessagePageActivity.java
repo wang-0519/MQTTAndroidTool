@@ -125,7 +125,34 @@ public class PublishMessagePageActivity extends AppCompatActivity {
                         break;
                     case R.id.v_publish_button:
                         if(publishMessage.getText() != null){
-                            Message message = new Message(publishMessage.getText().toString());
+                            Message message = null;
+                            switch (publishType.getCheckedRadioButtonId()){
+                                case R.id.v_b_string:
+                                    message = new Message(publishMessage.getText().toString());
+                                    break;
+                                case R.id.v_b_bin:
+                                    String binstr = publishMessage.getText().toString();
+                                    binstr = binstr.replaceAll(" ", "");
+                                    binstr = binstr.replaceAll("\n", "");
+                                    if(binstr.length() % 8 != 0){
+                                        int k = 8 - binstr.length() % 8;
+                                        while(k != 0){
+                                            binstr = "0" + binstr;
+                                            k--;
+                                        }
+                                    }
+                                    message = new Message(Translater.binToBytes(binstr));
+                                    break;
+                                case R.id.v_b_hex:
+                                    String hexstr = publishMessage.getText().toString();
+                                    hexstr = hexstr.replaceAll(" ", "");
+                                    hexstr = hexstr.replaceAll("\n", "");
+                                    if(hexstr.length() % 2 != 0){
+                                        hexstr = "0" + hexstr;
+                                    }
+                                    message = new Message(Translater.hexTobytes(hexstr));
+                                    break;
+                            }
                             message.setQos(publishQos.getText().toString());
                             message.setRetain(publishRetain.isChecked());
                             binder.publish(clientId, topicInformation, message);
@@ -141,21 +168,12 @@ public class PublishMessagePageActivity extends AppCompatActivity {
         publishQos.setOnClickListener(listener);
         publish.setOnClickListener(listener);
 
-//        publishType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-//                switch (radioGroup.getCheckedRadioButtonId()){
-//                    case R.id.v_b_string:
-//                        publishMessage.setText("");
-//                        break;
-//                    case R.id.v_b_bin:
-//                        publishMessage.setText("0b ");
-//                        break;
-//                    case R.id.v_b_hex:
-//                        publishMessage.setText("0x ");
-//                        break;
-//                }
-//            }
-//        });
+        publishType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                publishMessage.setText("");
+            }
+        });
     }
 }

@@ -196,6 +196,9 @@ public class ClientService extends Service {
          * @param topicInformation
          */
         public void deleteTopicInformation(String clientId, TopicInformation topicInformation){
+            if(topicInformation.getTpoicType() == TopicInformation.TOPICTYPE.SUBSCRIBE){
+                getMQTTClientThread(clientId).unsubscribe(topicInformation);
+            }
             ClientService.this.memoryBinder.deleteTopicInformation(clientId, topicInformation);
             getMQTTClientThread(clientId).getClientInformation().deleteTopic(topicInformation);
         }

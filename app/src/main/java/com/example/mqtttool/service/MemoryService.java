@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import client.ClientInformation;
 import client.TopicInformation;
+import helperClass.Translater;
 
 public class MemoryService extends Service {
 
@@ -146,7 +147,7 @@ public class MemoryService extends Service {
                     String str = null;
                     while((str = br.readLine()) != null){
                         String[] temps = str.split(" ");
-                        client.Message mess = new client.Message(temps[0]);
+                        client.Message mess = new client.Message(Translater.hexTobytes(temps[0]));
                         mess.setTime(temps[1]);
                         mess.setQos(temps[2].charAt(0) - '0');
                         mess.setRetain(sqLiteHandler.integerToBoolean(temps[3].charAt(0) - '0'));
@@ -174,7 +175,11 @@ public class MemoryService extends Service {
                 String fileName = filedir.getPath() + File.separator + topicInformation.getTopicName() + ".txt";
                 FileOutputStream fos = new FileOutputStream(fileName, true);
                 PrintWriter pw = new PrintWriter(fos);
-                pw.println(message.getMessage() + " " + message.getTime() + " " + message.getQos() + " " + sqLiteHandler.boolToInteger(message.isRetain()));
+                String str = "";
+                for(byte by : message.getBytes()){
+                    str += Translater.byteToHex(by);
+                }
+                pw.println(str + " " + message.getTime() + " " + message.getQos() + " " + sqLiteHandler.boolToInteger(message.isRetain()));
                 pw.flush();
                 pw.close();
                 fos.close();
