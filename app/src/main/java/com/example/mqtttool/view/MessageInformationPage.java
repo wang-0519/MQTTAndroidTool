@@ -102,22 +102,22 @@ public class MessageInformationPage extends AppCompatActivity {
         int temp = BytesHandler.getTypeOfMessage(message.getFixedHeader()[0]);
         switch (temp){
             case 1:
-                str = "报文类型：Connect\n剩余长度：" +  message.getOther_mess().get("remainLen");
+                str = "报文类型：Connect\n剩余长度：" +  message.getOtherMess().get("remainLen");
                 fixding.setText(str);
                 str = "协议级别：0x04\n"
-                        + "标志位：\n    用户名：" + (message.getOther_mess().get("userName") == null ? 0 : 1) + "\n"
-                        + "    密码：" + (message.getOther_mess().get("password") == null ? 0 : 1) + "\n"
-                        + "    遗嘱保留：" + (((message.getOther_mess().get("willRetain"))).equals("true") && message.getOther_mess().get("willTopic") != null ? 1 : 0) + "\n"
-                        + "    遗嘱Qos：" + message.getOther_mess().get("willQos") + "\n"
-                        + "    遗嘱标志：" + (message.getOther_mess().get("willTopic") == null ? 0 : 1) + "\n"
-                        + "    清理会话：" + (message.getOther_mess().get("cleanSession").equals("false") ? 0 : 1) + "\n"
-                        + "存活时间：" + message.getOther_mess().get("keepAlive");
+                        + "标志位：\n    用户名：" + (message.getOtherMess().get("userName") == null ? 0 : 1) + "\n"
+                        + "    密码：" + (message.getOtherMess().get("password") == null ? 0 : 1) + "\n"
+                        + "    遗嘱保留：" + (((message.getOtherMess().get("willRetain"))).equals("true") && message.getOtherMess().get("willTopic") != null ? 1 : 0) + "\n"
+                        + "    遗嘱Qos：" + message.getOtherMess().get("willQos") + "\n"
+                        + "    遗嘱标志：" + (message.getOtherMess().get("willTopic") == null ? 0 : 1) + "\n"
+                        + "    清理会话：" + (message.getOtherMess().get("cleanSession").equals("false") ? 0 : 1) + "\n"
+                        + "存活时间：" + message.getOtherMess().get("keepAlive");
                 variable.setText(str);
-                str = "客户端Id:" + message.getOther_mess().get("clientId") + "\n"
-                        + "遗嘱主题：" + message.getOther_mess().get("willTopic") + "\n"
-                        + "遗嘱信息：" + message.getOther_mess().get("willMessage") + "\n"
-                        + "用户名：" + message.getOther_mess().get("userName") + "\n"
-                        + "用户密码：" + message.getOther_mess().get("password");
+                str = "客户端Id:" + message.getOtherMess().get("clientId") + "\n"
+                        + "遗嘱主题：" + message.getOtherMess().get("willTopic") + "\n"
+                        + "遗嘱信息：" + message.getOtherMess().get("willMessage") + "\n"
+                        + "用户名：" + message.getOtherMess().get("userName") + "\n"
+                        + "用户密码：" + message.getOtherMess().get("password");
                 packageInfo.setText(str);
                 break;
             case 2:
@@ -125,17 +125,17 @@ public class MessageInformationPage extends AppCompatActivity {
                 fixding.setText(str);
                 str = "<-确认标志\n" +
                         "<-连接返回码";
-                if(message.getOther_mess().get("errorMessage") != null){
-                    str = str + "\n    错误信息：" + message.getOther_mess().get("errorMessage");
+                if(message.getOtherMess().get("errorMessage") != null){
+                    str = str + "\n    错误信息：" + message.getOtherMess().get("errorMessage");
                 }
                 variable.setText(str);
                 break;
             case 3:
-                str = "报文类型：Publish\nQos:" + message.getOther_mess().get("Qos") + "\n剩余长度：" + message.getOther_mess().get("remainLength");
+                str = "报文类型：Publish\nQos:" + message.getOtherMess().get("Qos") + "\n剩余长度：" + message.getOtherMess().get("remainLength");
                 fixding.setText(str);
-                str = "主题：" + message.getOther_mess().get("topic");
+                str = "主题：" + message.getOtherMess().get("topic");
                 variable.setText(str);
-                str = "消息：" + message.getOther_mess().get("message");
+                str = "消息：" + message.getOtherMess().get("message");
                 packageInfo.setText(str);
                 break;
             case 4:
@@ -158,9 +158,9 @@ public class MessageInformationPage extends AppCompatActivity {
             case 8:
             case 10:
                 if(temp == 8){
-                    str = "报文类型：Subscribe\n剩余长度：" + message.getOther_mess().get("remainLen");
+                    str = "报文类型：Subscribe\n剩余长度：" + message.getOtherMess().get("remainLen");
                 } else {
-                    str = "报文类型：Unsubscribe\n剩余长度：" + message.getOther_mess().get("remainLen");
+                    str = "报文类型：Unsubscribe\n剩余长度：" + message.getOtherMess().get("remainLen");
                 }
                 fixding.setText(str);
                 str = "<-报文标识符";
@@ -180,9 +180,9 @@ public class MessageInformationPage extends AppCompatActivity {
             case 9:
             case 11:
                 if( temp == 9){
-                    str = "报文类型：SubAck\n剩余长度：" + message.getOther_mess().get("remainLength");
+                    str = "报文类型：SubAck\n剩余长度：" + message.getOtherMess().get("remainLength");
                 } else {
-                    str = "报文类型：UnsubAck\n剩余长度：" + message.getOther_mess().get("remainLength");
+                    str = "报文类型：UnsubAck\n剩余长度：" + message.getOtherMess().get("remainLength");
                 }
                 fixding.setText(str);
                 str = "<-报文标识符";
