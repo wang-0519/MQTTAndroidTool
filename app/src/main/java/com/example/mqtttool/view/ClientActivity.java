@@ -233,12 +233,16 @@ public class ClientActivity extends AppCompatActivity {
                 .setPositiveButton("订阅", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        TopicInformation ti = new TopicInformation();
-                        ti.setTpoicType(TopicInformation.TOPICTYPE.SUBSCRIBE);
-                        ti.setTopicName(((EditText)(table.findViewById(R.id.v_t_subscribe_topic_name))).getText().toString());
-                        ti.setQos(((EditText)(table.findViewById(R.id.v_t_subscribe_topic_qos))).getText().toString());
-                        binder.subscribe(ci.getId() ,ti);
-                        flushView();
+                        if(((EditText)(table.findViewById(R.id.v_t_subscribe_topic_name))).getText().toString().length() != 0){
+                            TopicInformation ti = new TopicInformation();
+                            ti.setTpoicType(TopicInformation.TOPICTYPE.SUBSCRIBE);
+                            ti.setTopicName(((EditText)(table.findViewById(R.id.v_t_subscribe_topic_name))).getText().toString());
+                            ti.setQos(((EditText)(table.findViewById(R.id.v_t_subscribe_topic_qos))).getText().toString());
+                            binder.subscribe(ci.getId() ,ti);
+                            flushView();
+                        }else{
+                            Toast.makeText(ClientActivity.this, "话题名称为空！", Toast.LENGTH_LONG).show();
+                        }
                     }
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -287,12 +291,16 @@ public class ClientActivity extends AppCompatActivity {
                 .setPositiveButton("发布", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        TopicInformation ti = new TopicInformation();
-                        ti.setTpoicType(TopicInformation.TOPICTYPE.PUBLISH);
-                        ti.setTopicName(((EditText)(table.findViewById(R.id.v_t_publish_topic_name))).getText().toString());
-                        ti.setQos(((EditText)(table.findViewById(R.id.v_t_publish_topic_qos))).getText().toString());
-                        binder.publishTopic(ci.getId() ,ti);
-                        flushView();
+                        if(((EditText)(table.findViewById(R.id.v_t_publish_topic_name))).getText().toString().length() != 0){
+                            TopicInformation ti = new TopicInformation();
+                            ti.setTpoicType(TopicInformation.TOPICTYPE.PUBLISH);
+                            ti.setTopicName(((EditText)(table.findViewById(R.id.v_t_publish_topic_name))).getText().toString());
+                            ti.setQos(((EditText)(table.findViewById(R.id.v_t_publish_topic_qos))).getText().toString());
+                            binder.publishTopic(ci.getId() ,ti);
+                            flushView();
+                        } else {
+                            Toast.makeText(ClientActivity.this, "话题名称为空！", Toast.LENGTH_LONG).show();
+                        }
                     }
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -357,6 +365,8 @@ public class ClientActivity extends AppCompatActivity {
             HelpMess helpMess = (HelpMess)msg.obj;
             if(helpMess.isError()){
                 Toast.makeText(ClientActivity.this, helpMess.getErrorMessage(), Toast.LENGTH_LONG).show();
+            } else if(helpMess.getType() == HelpMess.HELP_MESS_TYPE.OTHER){
+                flushView();
             } else {
                 if(helpMess.getId().equals(ci.getId())){
                     flushView();

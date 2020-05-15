@@ -46,7 +46,7 @@ public class MQTTClientThread implements Runnable{
                 }
             }
             if(subtopics.size() != 0){
-                subscribe(subtopics);
+                client.subscribe(subtopics);
             }
         }
         while(sign != RUNTYPE.CLOSE){

@@ -142,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:gravity="right"
-                    android:text="重连延时(毫秒)" />
+                    android:text="重发间隔(毫秒)" />
 
                 <EditText
                     android:id="@+id/v_reconn_period"
@@ -150,7 +150,7 @@
                     android:layout_width="0dp"
                     android:layout_height="35dp"
                     android:layout_weight="7"
-                    android:text="1000" />
+                    android:text="10000" />
             </LinearLayout>
 
             <LinearLayout
@@ -173,7 +173,7 @@
                     android:layout_width="0dp"
                     android:layout_height="35dp"
                     android:layout_weight="7"
-                    android:text="3000" />
+                    android:text="30000" />
             </LinearLayout>
 
             <LinearLayout
@@ -188,7 +188,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:gravity="right"
-                    android:text="KeepAlive(Ping,秒)" />
+                    android:text="心跳间隔(秒)" />
 
                 <EditText
                     android:id="@+id/v_keep_alive"
@@ -199,28 +199,28 @@
                     android:text="10" />
             </LinearLayout>
 
-            <LinearLayout
-                style="@style/ConnLinear"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--style="@style/ConnLinear"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
 
-                <TextView
-                    style="@style/ConnTextViewStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="right"
-                    android:text="刷新Ping？" />
+                <!--<TextView-->
+                    <!--style="@style/ConnTextViewStyle"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="3"-->
+                    <!--android:gravity="right"-->
+                    <!--android:text="刷新Ping？" />-->
 
-                <CheckBox
-                    android:id="@+id/v_reschedule_ping"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="7"
-                    android:checked="true"
-                    android:theme="@style/CheckBoxStyle"/>
-            </LinearLayout>
+                <!--<CheckBox-->
+                    <!--android:id="@+id/v_reschedule_ping"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="7"-->
+                    <!--android:checked="true"-->
+                    <!--android:theme="@style/CheckBoxStyle"/>-->
+            <!--</LinearLayout>-->
 
             <LinearLayout
                 style="@style/ConnLinear"
@@ -268,51 +268,51 @@
                     android:theme="@style/CheckBoxStyle"/>
             </LinearLayout>
 
-            <LinearLayout
-                style="@style/ConnLinear"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--style="@style/ConnLinear"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
 
-                <TextView
-                    style="@style/ConnTextViewStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="right"
-                    android:text="兼容MQTT v3.1.1？" />
+                <!--<TextView-->
+                    <!--style="@style/ConnTextViewStyle"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="3"-->
+                    <!--android:gravity="right"-->
+                    <!--android:text="兼容MQTT v3.1.1？" />-->
 
-                <CheckBox
-                    android:id="@+id/v_mqtt_version"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="7"
-                    android:checked="true"
-                    android:theme="@style/CheckBoxStyle"/>
-            </LinearLayout>
+                <!--<CheckBox-->
+                    <!--android:id="@+id/v_mqtt_version"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="7"-->
+                    <!--android:checked="true"-->
+                    <!--android:theme="@style/CheckBoxStyle"/>-->
+            <!--</LinearLayout>-->
 
-            <LinearLayout
-                style="@style/ConnLinear"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--style="@style/ConnLinear"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
 
-                <TextView
-                    style="@style/ConnTextViewStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="right"
-                    android:text="队列传出Qos0消息？" />
+                <!--<TextView-->
+                    <!--style="@style/ConnTextViewStyle"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="3"-->
+                    <!--android:gravity="right"-->
+                    <!--android:text="队列传出Qos0消息？" />-->
 
-                <CheckBox
-                    android:id="@+id/v_queue_qos0"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="7"
-                    android:checked="true"
-                    android:theme="@style/CheckBoxStyle"/>
-            </LinearLayout>
+                <!--<CheckBox-->
+                    <!--android:id="@+id/v_queue_qos0"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="7"-->
+                    <!--android:checked="true"-->
+                    <!--android:theme="@style/CheckBoxStyle"/>-->
+            <!--</LinearLayout>-->
 
             <LinearLayout
                 style="@style/ConnLinear"

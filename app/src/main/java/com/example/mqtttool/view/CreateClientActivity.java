@@ -103,11 +103,11 @@ public class CreateClientActivity extends AppCompatActivity {
         edits[8] = findViewById(R.id.v_will_topic);
         edits[9] = findViewById(R.id.v_will_qos);
         edits[10] = findViewById(R.id.v_will_message);
-        checks[0] = findViewById(R.id.v_reschedule_ping);
+//        checks[0] = findViewById(R.id.v_reschedule_ping);
         checks[1] = findViewById(R.id.v_clean_session);
         checks[2] = findViewById(R.id.v_auto_conn);
-        checks[3] = findViewById(R.id.v_mqtt_version);
-        checks[4] = findViewById(R.id.v_queue_qos0);
+//        checks[3] = findViewById(R.id.v_mqtt_version);
+//        checks[4] = findViewById(R.id.v_queue_qos0);
         checks[5] = findViewById(R.id.v_will_retain);
         save = findViewById(R.id.v_save);
         back = findViewById(R.id.v_back);
@@ -128,11 +128,11 @@ public class CreateClientActivity extends AppCompatActivity {
         edits[8].setText(ci.getWillTopic());
         edits[9].setText("Qos" + ci.getWillQos());
         edits[10].setText(ci.getWillMessage());
-        checks[0].setChecked(ci.isReschedulePing());
+//        checks[0].setChecked(ci.isReschedulePing());
         checks[1].setChecked(ci.isCleanSession());
         checks[2].setChecked(ci.isAutoConn());
-        checks[3].setChecked(ci.isMqttVersion());
-        checks[4].setChecked(ci.isQueueQos0());
+//        checks[3].setChecked(ci.isMqttVersion());
+//        checks[4].setChecked(ci.isQueueQos0());
         checks[5].setChecked(ci.isWillRetain());
     }
 
@@ -156,8 +156,6 @@ public class CreateClientActivity extends AppCompatActivity {
                                 intent = new Intent(CreateClientActivity.this, ClientActivity.class);
                             }
                             startActivity(intent);
-                        } else {
-                            Toast.makeText(CreateClientActivity.this, "请按要求填写信息！", Toast.LENGTH_LONG).show();
                         }
                         break;
                     case R.id.v_back:
@@ -198,18 +196,25 @@ public class CreateClientActivity extends AppCompatActivity {
              * 从界面中读取用户配置
              */
             private void saveInfo(){
+                String error = "";
                 count = 0;
                 if(!edits[0].getText().toString().isEmpty()){
                     ci.setName(edits[0].getText().toString());
                     count++;
+                } else{
+                    error = error + "客户端名称为空！";
                 }
                 if(!edits[1].getText().toString().isEmpty()){
                     ci.setId(edits[1].getText().toString());
                     count++;
+                } else{
+                    error = error + "\n客户端ID为空！";
                 }
                 if(!edits[2].getText().toString().isEmpty()){
                     ci.setUserName(edits[2].getText().toString());
                     count++;
+                } else {
+                    error = error + "\n用户名为空！";
                 }
                 if(!edits[3].getText().toString().isEmpty()){
                     ci.setPassword(edits[3].getText().toString());
@@ -217,8 +222,15 @@ public class CreateClientActivity extends AppCompatActivity {
                     ci.setPassword(null);
                 }
                 if(!edits[4].getText().toString().isEmpty()){
-                    ci.setAddr(edits[4].getText().toString());
-                    count++;
+                    String str = edits[4].getText().toString();
+                    if(str.split(":").length != 2){
+                        error = error + "\n连接地址格式错误";
+                    } else {
+                        ci.setAddr(edits[4].getText().toString());
+                        count++;
+                    }
+                } else{
+                    error = error + "\n连接地址为空";
                 }
                 if(!edits[5].getText().toString().isEmpty()){
                     ci.setReconnPeriod(Integer.valueOf(edits[5].getText().toString()));
@@ -252,11 +264,7 @@ public class CreateClientActivity extends AppCompatActivity {
                 }else {
                     ci.setWillMessage(null);
                 }
-                if(checks[0].isChecked()){
-                    ci.setReschedulePing(true);
-                } else {
-                    ci.setReschedulePing(false);
-                }
+                ci.setReschedulePing(false);
                 if(checks[1].isChecked()){
                     ci.setCleanSession(true);
                 } else {
@@ -267,20 +275,15 @@ public class CreateClientActivity extends AppCompatActivity {
                 } else {
                     ci.setAutoConn(false);
                 }
-                if(checks[3].isChecked()){
-                    ci.setMqttVersion(true);
-                } else {
-                    ci.setMqttVersion(false);
-                }
-                if(checks[4].isChecked()){
-                    ci.setQueueQos0(true);
-                } else {
-                    ci.setQueueQos0(false);
-                }
+                ci.setMqttVersion(true);
+                ci.setQueueQos0(false);
                 if(checks[5].isChecked()){
                     ci.setWillRetain(true);
                 } else {
                     ci.setWillRetain(false);
+                }
+                if(count != 8){
+                    Toast.makeText(CreateClientActivity.this, error, Toast.LENGTH_LONG).show();
                 }
             }
         };

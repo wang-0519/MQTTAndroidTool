@@ -124,7 +124,9 @@ public class PublishMessagePageActivity extends AppCompatActivity {
                         });
                         break;
                     case R.id.v_publish_button:
-                        if(publishMessage.getText() != null){
+                        if(publishMessage.getText().length() != 0){
+                            boolean bool = true;
+                            int count = 0;
                             Message message = null;
                             switch (publishType.getCheckedRadioButtonId()){
                                 case R.id.v_b_string:
@@ -141,7 +143,14 @@ public class PublishMessagePageActivity extends AppCompatActivity {
                                             k--;
                                         }
                                     }
-                                    message = new Message(Translater.binToBytes(binstr));
+                                    while(count < binstr.length() && "01".indexOf(binstr.charAt(count)) != -1){
+                                        count++;
+                                    }
+                                    if(count < binstr.length()){
+                                        bool = false;
+                                    } else {
+                                        message = new Message(Translater.binToBytes(binstr));
+                                    }
                                     break;
                                 case R.id.v_b_hex:
                                     String hexstr = publishMessage.getText().toString();
@@ -150,14 +159,25 @@ public class PublishMessagePageActivity extends AppCompatActivity {
                                     if(hexstr.length() % 2 != 0){
                                         hexstr = "0" + hexstr;
                                     }
-                                    message = new Message(Translater.hexTobytes(hexstr));
+                                    while(count < hexstr.length() && "013456789ABCDEF".indexOf(hexstr.charAt(count)) != -1){
+                                        count++;
+                                    }
+                                    if(count < hexstr.length()){
+                                        bool = false;
+                                    } else {
+                                        message = new Message(Translater.hexTobytes(hexstr));
+                                    }
                                     break;
                             }
-                            message.setQos(publishQos.getText().toString());
-                            message.setRetain(publishRetain.isChecked());
-                            binder.publish(clientId, topicInformation, message);
-                            Intent intent = new Intent(PublishMessagePageActivity.this, MessagePageActivity.class);
-                            startActivity(intent);
+                            if(bool){
+                                message.setQos(publishQos.getText().toString());
+                                message.setRetain(publishRetain.isChecked());
+                                binder.publish(clientId, topicInformation, message);
+                                Intent intent = new Intent(PublishMessagePageActivity.this, MessagePageActivity.class);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(PublishMessagePageActivity.this, "输入内容格式错误！", Toast.LENGTH_LONG).show();
+                            }
                         } else{
                             Toast.makeText(PublishMessagePageActivity.this, "内容为空！", Toast.LENGTH_LONG).show();
                         }

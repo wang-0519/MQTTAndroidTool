@@ -110,6 +110,9 @@ public class ClientService extends Service {
          */
         public void updateClient(ClientInformation clientInformation){
             ClientService.this.memoryBinder.updateClient(clientInformation);
+//            this.stopClient(clientInformation.getId());
+//            ClientService.this.threadPool.findClientThread(clientInformation.getId()).setClientInformation(clientInformation);
+//            this.reConnect(clientInformation.getId());
             ClientService.this.threadPool.updateThread(clientInformation);
         }
 
@@ -182,12 +185,12 @@ public class ClientService extends Service {
          * @param topicInformation
          */
         public void publishTopic(String clientId, TopicInformation topicInformation){
-            getMQTTClientThread(clientId).getClientInformation().addTopic(topicInformation);
             if(getMQTTClientThread(clientId).getClientInformation().getTopic(topicInformation.getTopicName(), topicInformation.getTpoicType()) != null){
                 ClientService.this.memoryBinder.updateTopicInformation(clientId, topicInformation);
             } else {
                 ClientService.this.memoryBinder.addTopicInformation(clientId, topicInformation);
             }
+            getMQTTClientThread(clientId).getClientInformation().addTopic(topicInformation);
         }
 
         /**

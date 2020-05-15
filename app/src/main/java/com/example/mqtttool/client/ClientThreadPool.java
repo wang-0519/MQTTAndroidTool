@@ -97,6 +97,7 @@ public class ClientThreadPool extends ThreadPoolExecutor {
         if(thread.sign == MQTTClientThread.RUNTYPE.CONNECT){
             thread.closeThread();
         }
+        clientInformation.setState(ClientInformation.CONN_STATE.NO_CONN);
         thread.setClientInformation(clientInformation);
         this.execute(thread);
         return true;

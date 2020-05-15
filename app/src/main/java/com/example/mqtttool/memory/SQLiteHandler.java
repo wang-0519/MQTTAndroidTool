@@ -123,9 +123,9 @@ public class SQLiteHandler {
         Cursor cu = getter.rawQuery("select * from t_topic_information where m_client_id = '" + clientInformation.getId() + "';", null);
         for(cu.moveToFirst(); !cu.isAfterLast(); cu.moveToNext()){
             TopicInformation ti = new TopicInformation();
-            ti.setTopicName(cu.getString(2));
-            ti.setTpoicType(getTopicType(cu.getString(3)));
-            ti.setQos(cu.getInt(4));
+            ti.setTopicName(cu.getString(1));
+            ti.setTpoicType(getTopicType(cu.getString(2)));
+            ti.setQos(cu.getInt(3));
             topics.add(ti);
         }
         return topics;
@@ -164,7 +164,6 @@ public class SQLiteHandler {
             setter.execSQL(sql);
         }catch (Exception e){
             String error = "更新失败";
-            System.out.println(error);
             e.printStackTrace();
         }
     }
@@ -184,7 +183,7 @@ public class SQLiteHandler {
      * @param topicInformation
      */
     public void addTopicInformation(String clientId, TopicInformation topicInformation){
-        setter.execSQL("insert into t_topic_information values(null,'"
+        setter.execSQL("insert into t_topic_information values('"
                 + clientId + "','"
                 + topicInformation.getTopicName() + "','"
                 + setTopicType(topicInformation.getTpoicType()) + "',"

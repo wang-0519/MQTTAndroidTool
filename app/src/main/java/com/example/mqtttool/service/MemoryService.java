@@ -111,7 +111,7 @@ public class MemoryService extends Service {
          * @param topicInformation
          */
         public void updateTopicInformation(String clientId, TopicInformation topicInformation){
-            sqLiteHandler.addTopicInformation(clientId, topicInformation);
+            sqLiteHandler.updateTopicQos(clientId, topicInformation);
         }
 
         /**

@@ -1,6 +1,5 @@
 package com.example.mqtttool.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.RadioGroup;
@@ -13,11 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mqtttool.R;
 
-import java.util.ArrayList;
-
 import MQTTMessage.AbstractMess;
 import MQTTMessage.impl.SubscribeMessage;
-import MQTTMessage.impl.UnsubackMessage;
 import MQTTMessage.impl.UnsubscribeMessage;
 import client.TopicInformation;
 import helperClass.BytesHandler;
