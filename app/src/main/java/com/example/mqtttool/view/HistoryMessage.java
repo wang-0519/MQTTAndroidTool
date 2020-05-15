@@ -156,10 +156,11 @@ public class HistoryMessage extends AppCompatActivity {
             for(AbstractMess absMess : uMessages){
                 Map<String, Object> map = new HashMap<>();
                 map.put("type", getMessType(absMess));
+                map.put("dir", absMess.getMessDir());
                 mapList.add(map);
             }
             sa = new SimpleAdapter(this, mapList, R.layout.history_ubytes_adapter,
-                    new String[]{"type"}, new int[]{R.id.v_history_message_type});
+                    new String[]{"type","dir"}, new int[]{R.id.v_history_message_type,R.id.v_history_message_dir});
             history.setAdapter(sa);
         } else {
             if(binder != null){
