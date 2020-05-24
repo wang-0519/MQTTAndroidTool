@@ -159,7 +159,7 @@ public class PublishMessagePageActivity extends AppCompatActivity {
                                     if(hexstr.length() % 2 != 0){
                                         hexstr = "0" + hexstr;
                                     }
-                                    while(count < hexstr.length() && "013456789ABCDEF".indexOf(hexstr.charAt(count)) != -1){
+                                    while(count < hexstr.length() && "0123456789ABCDEF".indexOf(hexstr.charAt(count)) != -1){
                                         count++;
                                     }
                                     if(count < hexstr.length()){
